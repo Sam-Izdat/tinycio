@@ -15,7 +15,7 @@ from .fsio.lutfile import load_lut, save_lut, _infer_lut_file_format, _generate_
 from .fsio.format import LUTFormat
 from .util.colorutil import srgb_luminance
 from .util.miscutil import trilinear_interpolation
-from .loss import feature_moments_caculation
+from .loss import feature_moments_calculation
 
 class LookupTable:
     """
@@ -215,8 +215,8 @@ class LookupTable:
                     loss = 0.
 
                     # Main feature loss
-                    feat_source_mean, feat_source_p2, feat_source_p3 = feature_moments_caculation(t_source.view(1,3,-1))
-                    feat_target_mean, feat_target_p2, feat_target_p3 = feature_moments_caculation(im_target.view(1,3,-1))
+                    feat_source_mean, feat_source_p2, feat_source_p3 = feature_moments_calculation(t_source.view(1,3,-1))
+                    feat_target_mean, feat_target_p2, feat_target_p3 = feature_moments_calculation(im_target.view(1,3,-1))
                     loss += F.mse_loss(feat_source_mean, feat_target_mean) * fm_mean_scale * strength 
                     loss += F.mse_loss(feat_source_p2, feat_target_p2) * fm_p2_scale * strength 
                     loss += F.mse_loss(feat_source_p3, feat_target_p3) * fm_p3_scale * strength 

@@ -17,7 +17,7 @@ from .util.miscutil import version_check_minor
 from .colorspace import ColorSpace
 from .lut import LookupTable
 from .fsio.format import LUTFormat
-from .loss import feature_moments_caculation
+from .loss import feature_moments_calculation
 from .globals import TINYCIO_VERSION
 
 class ColorCorrection:
@@ -97,11 +97,14 @@ class ColorCorrection:
         )  -> ColorCorrection:
         """
         Perform gradient descent on the color correction settings, so that the appearance  
-        of the source image matches the target.
+        of the source image matches the target. 
 
-        :param im_source: Source image tensor. Values must be in range [0, 1].
+        .. note::
+            Images need to be in *ACEScc* color space.
+
+        :param im_source: Source image tensor in *ACEScc* color space. Values must be in range [0, 1].
         :type im_source: torch.Tensor | ColorImage
-        :param im_target: Target image tensor.
+        :param im_target: Target image tensor in *ACEScc* color space.
         :type im_target: torch.Tensor | ColorImage
         :param steps: Number of optimization steps.
         :param learning_rate: Learning rate for gradient descent.
@@ -204,8 +207,8 @@ class ColorCorrection:
                 loss = 0.
 
                 # Main feature loss
-                feat_source_mean, feat_source_p2, feat_source_p3 = feature_moments_caculation(t_source.view(1,3,-1))
-                feat_target_mean, feat_target_p2, feat_target_p3 = feature_moments_caculation(im_target.view(1,3,-1))
+                feat_source_mean, feat_source_p2, feat_source_p3 = feature_moments_calculation(t_source.view(1,3,-1))
+                feat_target_mean, feat_target_p2, feat_target_p3 = feature_moments_calculation(im_target.view(1,3,-1))
                 loss += F.mse_loss(feat_source_mean, feat_target_mean) * fm_mean_scale * strength 
                 loss += F.mse_loss(feat_source_p2, feat_target_p2) * fm_p2_scale * strength 
                 loss += F.mse_loss(feat_source_p3, feat_target_p3) * fm_p3_scale * strength 

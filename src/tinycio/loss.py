@@ -1,6 +1,6 @@
 import torch
 
-def feature_moments_caculation(feat, eps=1e-5):
+def feature_moments_calculation(feat, eps=1e-5):
     # https://github.com/semchan/NLUT/blob/main/LICENSE
     # MIT License
     # <!-- Copyright (c) 2010, 2011 the Friendika Project -->
