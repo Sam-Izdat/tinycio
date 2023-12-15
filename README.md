@@ -1,4 +1,4 @@
-![tinycio](./doc/images/tinycio_sm.png)
+![tinycio](https://raw.githubusercontent.com/Sam-Izdat/tinycio/main/doc/images/tinycio_sm.png)
 
 # About
 
