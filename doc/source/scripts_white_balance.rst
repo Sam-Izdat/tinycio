@@ -8,7 +8,7 @@ White balance an image.
 .. highlight:: text
 .. code-block:: text
 
-   sage: white_balance.py [-h] --source-white SOURCE_WHITE --target-white TARGET_WHITE
+   usage: white_balance.py [-h] --source-white SOURCE_WHITE --target-white TARGET_WHITE
                            [--color-space] [--igf ] [--ogf ]
                            input output
 

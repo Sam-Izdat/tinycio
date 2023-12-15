@@ -212,14 +212,12 @@ class ColorCorrection:
                 loss += F.mse_loss(feat_source_mean, feat_target_mean) * fm_mean_scale * strength 
                 loss += F.mse_loss(feat_source_p2, feat_target_p2) * fm_p2_scale * strength 
                 loss += F.mse_loss(feat_source_p3, feat_target_p3) * fm_p3_scale * strength 
-
                   
                 # Additional saturation-focused loss
                 sat_s = srgb_luminance(t_source).repeat(3,1,1) - t_source
                 sat_t = srgb_luminance(im_target).repeat(3,1,1) - im_target
                 loss += F.mse_loss(sat_s.mean(), sat_t.mean()) * sat_scale * strength 
                 loss += F.mse_loss(sat_s.std(), sat_t.std()) * sat_scale * strength 
-
 
                 # Self-similarity loss
                 if strength < 1.: loss += F.mse_loss(t_source, im_source) * selfsim_scale * (1. - strength)
@@ -580,7 +578,7 @@ class ColorCorrection:
             torch.exp2(cc * 17.52 - 9.72))
         return res
 
-    def __eval_all(self, im:torch.Tensor, settings_tensor=None):
+    def __eval_all(self, im:torch.Tensor, settings_tensor=None) -> torch.Tensor:
         im = im.clone()
         f3_one =  Float3(1.)
 
