@@ -9,7 +9,7 @@ A primitive, lightweight Python color library for PyTorch-involved projects. It 
 * Recommended: set up a clean Python environment
 * [Install PyTorch  as instructed here](https://pytorch.org/get-started/locally/)
 * Run  `pip install tinycio`
-* Run  `imageio_download_bin freeimage` ([iio docs on fi](https://imageio.readthedocs.io/en/stable/_autosummary/imageio.plugins.freeimage.html#module-imageio.plugins.freeimage)
+* Run  `imageio_download_bin freeimage` ([iio docs on fi](https://imageio.readthedocs.io/en/stable/_autosummary/imageio.plugins.freeimage.html#module-imageio.plugins.freeimage))
 
 # Requires
 
