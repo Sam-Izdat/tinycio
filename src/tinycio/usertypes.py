@@ -301,9 +301,6 @@ class ColorImage(torch.Tensor):
         """
         Apply a :class:`LookupTable` and return as new :class:`ColorImage`.
 
-        .. note::
-            Any needed color space conversion will be handled automatically.
-
         :param lut: :class:`.LookupTable` or LUT file path
         :param lut_format: Format of the LUT, if loading from file.
         :return: New :class:`ColorImage` with LUT applied.
