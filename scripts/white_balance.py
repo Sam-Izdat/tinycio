@@ -92,7 +92,6 @@ try:
 
     if "," in args.target_white:
         tgt_white = args.target_white.split(',')
-        print(tgt_white)
         if len(tgt_white) == 2:
             tgt_white = Chromaticity(float(tgt_white[0]), float(tgt_white[1]))
         else:
