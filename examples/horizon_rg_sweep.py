@@ -5,7 +5,7 @@ from tinycio import Color, ColorImage
 
 # Keying into PyTorch tensors for each pixel is prohibitively expensive.
 # We can instead hand it over to NumPy - still slow, but relatively tolerable.
-im_in = ColorImage.load('../doc/images/horizon.png', color_space='SRGB')
+im_in = ColorImage.load('../doc/images/examples_ll/horizon.png', color_space='SRGB')
 start = time.time()
 im_in = im_in.to_color_space('SRGB_LIN').numpy()
 C, H, W = im_in.shape

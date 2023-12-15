@@ -1,19 +1,18 @@
 import torch
 import time
-from tinycio import ColorImage, ColorCorrection
+from tinycio import ColorImage
+from tinycio.util import apply_hue_oklab
 
 # Each vertical line of the image hue shifted as a tensor.
 res = []
-im_in = ColorImage.load('../doc/images/horizon.png', color_space='SRGB')
+im_in = ColorImage.load('../doc/images/examples_ll/horizon.png', 'SRGB')
 start = time.time()
 im_in = im_in.to_color_space('OKLAB')
-cc = ColorCorrection()
 _, H, W = im_in.size()
 for x in range(W): 
-	cc.set_hue_delta(x / W * 2. - 1)
-	res.append(im_in[:, :, x:x+1].correct(cc))
-im_out = ColorImage(torch.cat(res, dim = 2), 'OKLAB')
-im_out = im_out.to_color_space('SRGB').clamp(0., 1.)
+	res.append(apply_hue_oklab(im_in[:, :, x:x+1], x / W * 2. - 1))
+im_out = ColorImage(torch.cat(res, dim = 2).clamp(0., 1.), 'OKLAB')
+im_out = im_out.to_color_space('SRGB')
 end = time.time()
 im_out.save('../out/horizon_hue_sweep.png')
 print(f'Code execution: {end - start} seconds')

@@ -2,7 +2,7 @@ import torch
 import time
 from tinycio import ColorImage
 
-im_in = ColorImage.load('../doc/images/horizon.png', color_space='SRGB')
+im_in = ColorImage.load('../doc/images/examples_ll/horizon.png', color_space='SRGB')
 start = time.time()
 im_in = im_in.to_color_space('SRGB_LIN')
 C, H, W = im_in.shape

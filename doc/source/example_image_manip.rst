@@ -32,7 +32,7 @@ Pixel sweep
    :width: 700
    :alt: Image pixel sweep
 
-   \~4.5s - getting yikesy
+   \~3.8s - getting yikesy
 
 Baseline
 --------
@@ -40,4 +40,4 @@ Baseline
 .. literalinclude:: ../../examples/horizon_rg_torch.py
    :language: python
 
-Same operation, but with PyTorch functions: ~0.05s
+Same operation, but with PyTorch functions: ~0.04s
