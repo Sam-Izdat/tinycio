@@ -159,3 +159,4 @@ Special thanks
 
     GitHub <https://github.com/Sam-Izdat/tinycio>
     PyPi <https://pypi.org/project/tinycio/>
+    Docs <https://sam-izdat.github.io/tinycio-docs/>

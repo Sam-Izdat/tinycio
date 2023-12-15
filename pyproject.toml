@@ -1,6 +1,6 @@
 [project]
 name = "tinycio"
-version = "0.5.0"
+version = "0.5.1"
 authors = [
   { name="Sam Izdat", email="ghsamizdat@gmail.com" },
 ]
@@ -22,7 +22,7 @@ dependencies = [
 release = "a"
 
 [project.urls]
-Homepage = "https://github.com/Sam-Izdat/tinycio"
+Homepage = "https://sam-izdat.github.io/tinycio-docs"
 Issues = "https://github.com/Sam-Izdat/tinycio/issues"
 
 [build-system]
