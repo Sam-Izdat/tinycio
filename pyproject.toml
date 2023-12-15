@@ -1,0 +1,30 @@
+[project]
+name = "tinycio"
+version = "0.5.0"
+authors = [
+  { name="Sam Izdat", email="ghsamizdat@gmail.com" },
+]
+description = "A primitive, lightweight color management framework for PyTorch-involved projects"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "numpy>=1.21",
+  "imageio>=2.9",
+  "toml>=0.10",
+  "tqdm>=4.64"
+]
+[tool.tinycio_about]
+release = "a"
+
+[project.urls]
+Homepage = "https://github.com/Sam-Izdat/tinycio"
+Issues = "https://github.com/Sam-Izdat/tinycio/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

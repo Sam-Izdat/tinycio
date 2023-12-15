@@ -1,0 +1,1 @@
+python -m sphinx.ext.intersphinx ../_build/html/objects.inv
