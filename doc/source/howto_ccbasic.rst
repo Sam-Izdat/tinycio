@@ -39,8 +39,8 @@ Alternatively, without :class:`.ColorImage`:
 Most color correction uses *ACEScc*, so :py:meth:`.ColorCorrection.apply` expects inputs in that color space. 
 :py:meth:`.ColorImage.correct` handles this conversion automatically.
 
-Your instructions to the the :class:`.ColorCorrection` object are persistent (they change 
-the instance's state rather than returning a new one) and idempotent (no difference between 
+Your instructions to the :class:`.ColorCorrection` object will change the state of 
+the instance rather than returning a new one and will all be idempotent (no difference between 
 calling :py:meth:`~.ColorCorrection.set_hue_delta()` once or five times). It is recommended 
 to use the setter functions as they perform color value conversions and check value ranges.
 

@@ -116,7 +116,7 @@ class ColorImage(torch.Tensor):
         new._set_meta()
         return new
 
-    # We want to to maintain state through these common torch methods.
+    # We want to maintain state through these common torch methods.
     # Annoying, but __torch_function__ is footgun city, and I'm not sure it would work anyway.
     @wrap_pt_im_method
     def clamp(self, *args, **kwargs):
@@ -322,9 +322,14 @@ class ColorImage(torch.Tensor):
         if type(tone_mapper) is str: tone_mapper = ToneMapping.Variant[tone_mapper.strip().upper()]
         assert isinstance(tone_mapper, ToneMapping.Variant), "Invalid tone mapper"
         ip = self.clone()
-        if tone_mapper == ToneMapping.Variant.ACESCG and self.color_space != ColorSpace.Variant.ACESCG:
-            ip = ColorSpace.convert(ip, source=self.color_space, destination=ColorSpace.Variant.ACESCG)
-        res = ToneMapping.apply(ip, tone_mapper=tone_mapper)
+        cs_tm = self.color_space
+        if tone_mapper == ToneMapping.Variant.ACESCG:
+            cs_tm = ColorSpace.Variant.ACESCG
+        else:
+            cs_tm = ColorSpace.Variant.SRGB_LIN
+        res = ColorSpace.convert(ip, source=self.color_space, destination=cs_tm)
+        res = ToneMapping.apply(res, tone_mapper=tone_mapper)
+        res = ColorSpace.convert(res, source=cs_tm, destination=self.color_space)
         return ColorImage(res, color_space=self.color_space)
 
     def lut(self, lut:Union[str, LookupTable], lut_format=LUTFormat.UNKNOWN) -> ColorImage:
