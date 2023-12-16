@@ -10,5 +10,5 @@ for x in range(width):
     col = illum_xy.to_xyz(light_scale * (1./(((x / width) * dist_scale)**2 + 1.)))
     res.append(col.image())
 
-out = ColorImage(torch.cat(res, dim = 2).repeat(1, 50, 1), 'CIE_XYZ')
-out.to_color_space('SRGB').clamp(0., 1.).save('../out/sweep_illuminant.png')
+out = ColorImage(torch.cat(res, dim = 2).repeat(1, 50, 1).clamp(0., 1.), 'CIE_XYZ')
+out.to_color_space('SRGB').save('../out/sweep_illuminant.png')

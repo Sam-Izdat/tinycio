@@ -63,14 +63,22 @@ class Chromaticity(Float2):
         z = (luminance / self[1]) * (1 - self[0] - self[1])
         return Color(x, luminance, z)
 
+def wrap_pt_im_method(method):
+    def wrapper(self, *args, **kwargs):
+        result = method(self, *args, **kwargs)
+        return self.__class__(result, color_space=self.color_space) if isinstance(result, torch.Tensor) else result
+    return wrapper
+
 class ColorImage(torch.Tensor):
     """
     2D 3-channel color image using float32. Convenience wrapper around a [C=3, H, W] sized PyTorch image tensor. 
     This is the most hands-off abstraction, as it automatically handles color space conversion as needed.
 
     .. note::
-        All transformative methods will return a new :class:`ColorImage` instance without 
-        overwriting data. To overwrite use as e.g. :code:`im = im.to_color_space(cs_dst)`
+        All transformative methods will create a new :class:`ColorImage` instance without altering the 
+        current state. PyTorch methods and operations will work as expected but will return with 
+        the color space set to UNKNOWN. Exceptions include :code:`.clamp()`, :code:`.lerp()`, 
+        :code:`.minimum()`, and :code:`.maximum()`, which will retain the current state for convenience.
 
     .. note:: 
         Assumes size/shape [C, H, W] for both PyTorch tensor or NumPy array inputs.
@@ -81,7 +89,7 @@ class ColorImage(torch.Tensor):
     :type color_space: str | ColorSpace.Variant
 
     """
-    color_space = None
+    color_space = ColorSpace.Variant.UNKNOWN
     
     meta_channel_names  = ['unknown', 'unknown', 'uknown']
     meta_white_point    = 'unknown'
@@ -99,14 +107,36 @@ class ColorImage(torch.Tensor):
             raise TypeError("ColorImage must be a [C=3, H, W] sized image tensor.")
 
         # There is a reason why this has to be here, in this order, and why this hangs "color_space" on "new".
-        # Setting it prematurely on cls will corrupt the metadata of the instance being transitioned to a new cs.
-        # We want to retain old instances, intact.
+        # Setting it prematurely on cls will yeet the metadata of the instance being transitioned to a new cs.
         new = super(ColorImage, cls).__new__(cls, ten)
-        new.color_space = args[1] if len(args) > 1 else kwargs.get("color_space", ColorSpace.Variant.UNKNOWN)
+        cs_default = args[0].color_space if isinstance(args[0], ColorImage) else ColorSpace.Variant.UNKNOWN
+        new.color_space = args[1] if len(args) > 1 else kwargs.get("color_space", cs_default)
         if type(new.color_space) is str: new.color_space = ColorSpace.Variant[new.color_space.strip().upper()]
         assert isinstance(new.color_space, ColorSpace.Variant), "Invalid color space"
         new._set_meta()
         return new
+
+    # We want to to maintain state through these common torch methods.
+    # Annoying, but __torch_function__ is footgun city, and I'm not sure it would work anyway.
+    @wrap_pt_im_method
+    def clamp(self, *args, **kwargs):
+        return super().clamp(*args, **kwargs)
+
+    @wrap_pt_im_method
+    def clip(self, *args, **kwargs):
+        return super().clamp(*args, **kwargs)
+
+    @wrap_pt_im_method
+    def lerp(self, *args, **kwargs):
+        return super().lerp(*args, **kwargs)
+        
+    @wrap_pt_im_method
+    def minimum(self, *args, **kwargs):
+        return super().minimum(*args, **kwargs)
+        
+    @wrap_pt_im_method
+    def maximum(self, *args, **kwargs):
+        return super().maximum(*args, **kwargs)
 
     def _set_meta(self):
         # Meta variables are only used for a debug printout at this time
@@ -275,7 +305,7 @@ class ColorImage(torch.Tensor):
         assert isinstance(color_space, ColorSpace.Variant), "Invalid color space"
         res = None
         res = ColorSpace.convert(self.clone(), source=self.color_space, destination=color_space)
-        res = ColorImage(res.data, color_space=color_space)
+        res = ColorImage(res, color_space=color_space)
         return res
 
     def tone_map(self, tone_mapper:Union[str,ToneMapping.Variant]) -> ColorImage:
