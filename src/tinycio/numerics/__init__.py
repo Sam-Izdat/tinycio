@@ -18,6 +18,8 @@ can use them as such. Matrices are not natively supported.
     # Several possible inputs
     Float4(4,3,2,1)             # Float4([4., 3., 2., 1.])
     Float4(1.23)                # Float4([1.23, 1.23, 1.23, 1.23])
+    Float4([4,3,2,1])           # Float4([4., 3., 2., 1.])
+    Float4((4,3,2,1))           # Float4([4., 3., 2., 1.])
     Float4(np.array([3,2,1,0])) # Float4([3., 2., 1., 0.])
     Float4(torch.rand(4))       # Float4([0.22407186, 0.26193792, 0.89055574, 0.57386285])
     Float4(torch.rand(4,1,1))   # Float4([0.99545109, 0.46160549, 0.78145427, 0.02302521])
@@ -31,6 +33,8 @@ can use them as such. Matrices are not natively supported.
     
     # Utility functions
     bar = Float3.y_axis()       # Float3([0., 1., 0.])
+    bar.list()                  # [0., 1., 0.]
+    bar.tuple()                 # (0., 1., 0.)
     lerp(foo.bbb, bar, 0.5)     # Float3([1.5, 2. , 1.5])
     saturate(Float2(-2,5))      # Float2([0., 1.])
     sign(Float2(-2,5))          # Float2([-1.,  1.])

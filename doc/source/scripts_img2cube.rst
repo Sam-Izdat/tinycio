@@ -12,7 +12,7 @@ Create a color grading LUT by aligning the appearance of a source image to that 
 .. highlight:: text
 .. code-block:: text
 
-   usage: img2cube.py [-h] [--save-lut SAVE_LUT] [--save-image SAVE_IMAGE] [--size SIZE]
+   usage: tcio-img2cube [-h] [--save-lut SAVE_LUT] [--save-image SAVE_IMAGE] [--size SIZE]
                       [--steps STEPS] [--learning-rate LEARNING_RATE] [--loss-fm LOSS_FM]
                       [--loss-jsd LOSS_JSD] [--loss-ssim LOSS_SSIM] [--empty-lut] [--igfs ]
                       [--igft ] [--ogf ] [--device ]
@@ -55,9 +55,9 @@ Create a color grading LUT by aligning the appearance of a source image to that 
 .. highlight:: shell
 .. code-block:: shell
 
-   $ ./img2cube.py --t 500 --save-image out.png source.png target.png
+   $ tcio-img2cube --t 500 --save-image out.png source.png target.png
 
 .. rubric:: Script:
 
-.. literalinclude:: ../../scripts/img2cube.py
+.. literalinclude:: ../../src/tinycio/scripts/img2cube.py
    :language: python

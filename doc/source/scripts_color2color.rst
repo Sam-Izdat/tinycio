@@ -8,7 +8,7 @@ Image-to-image color space conversion and tone mapping.
 .. highlight:: text
 .. code-block:: text
 
-   usage: color2color.py [-h] [--igf ] [--ogf ] [--tonemapper ] [--keep-alpha]
+   usage: tcio-color2color [-h] [--igf ] [--ogf ] [--tonemapper ] [--keep-alpha]
                          input input-color-space output output-color-space
 
    Convert the color space an image, with an optional tone mapping stage.
@@ -46,23 +46,23 @@ Image-to-image color space conversion and tone mapping.
 .. highlight:: shell
 .. code-block:: shell
 
-   $ ./color2color.py -t agx input.tif cie_xyz output.png srgb
+   $ tcio-color2color -t agx input.tif cie_xyz output.png srgb
 
 More explicit example:
 
 .. highlight:: shell
 .. code-block:: shell
 
-   $ ./color2color.py --igf uint8 --ogf sfloat16 --keep-alpha input.png srgb output.tif aces2065_1
+   $ tcio-color2color --igf uint8 --ogf sfloat16 --keep-alpha input.png srgb output.tif aces2065_1
 
 Also, note that the ACEScg RRT+ODT will not be applied automatically, so in this case "acescg" needs to be repeated - once for the "output color space" and once for the "tonemapper" option:
 
 .. highlight:: shell
 .. code-block:: shell
 
-   $ ./color2color.py -t acescg input.exr acescg output.png srgb
+   $ tcio-color2color -t acescg input.exr acescg output.png srgb
 
 .. rubric:: Script:
 
-.. literalinclude:: ../../scripts/color2color.py
+.. literalinclude:: ../../src/tinycio/scripts/color2color.py
    :language: python

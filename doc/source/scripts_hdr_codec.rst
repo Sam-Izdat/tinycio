@@ -8,7 +8,7 @@ Encode and decode HDR color data to and from low-bit-depth RGBA files.
 .. highlight:: text
 .. code-block:: text
 
-   usage: hdr_codec.py [-h] (--encode | --decode) [--igf ] [--ogf ] [--format {logluv}] input output
+   usage: tcio-hdr-codec [-h] (--encode | --decode) [--igf ] [--ogf ] [--format {logluv}] input output
 
    Encode and decode high dynamic range color data.
 
@@ -33,14 +33,14 @@ Encode and decode HDR color data to and from low-bit-depth RGBA files.
 .. highlight:: shell
 .. code-block:: shell
 
-   $ ./hdr_codec.py --encode hdr_image.exr encoded_image.png
+   $ tcio-hdr-codec --encode hdr_image.exr encoded_image.png
 
 .. highlight:: shell
 .. code-block:: shell
 
-   $ ./hdr_codec.py --decode encoded_image.png hdr_image.exr
+   $ tcio-hdr-codec --decode encoded_image.png hdr_image.exr
 
 .. rubric:: Script:
 
-.. literalinclude:: ../../scripts/hdr_codec.py
+.. literalinclude:: ../../src/tinycio/scripts/hdr_codec.py
    :language: python

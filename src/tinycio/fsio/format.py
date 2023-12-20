@@ -9,70 +9,38 @@ class GraphicsFormat(IntEnum):
     .. highlight:: text
     .. code-block:: text
 
-        - UNKNOWN
-        - R8_UINT             
-        - R8G8_UINT           
-        - R8G8B8_UINT         
-        - R8G8B8A8_UINT       
-        - R16_UINT            
-        - R16G16_UINT         
-        - R16G16B16_UINT      
-        - R16G16B16A16_UINT   
-        - R32_UINT            
-        - R32G32_UINT         
-        - R32G32B32_UINT      
-        - R32G32B32A32_UINT   
-        - R16_SFLOAT          
-        - R16G16_SFLOAT       
-        - R16G16B16_SFLOAT    
-        - R16G16B16A16_SFLOAT 
-        - R32_SFLOAT          
-        - R32G32_SFLOAT       
-        - R32G32B32_SFLOAT    
-        - R32G32B32A32_SFLOAT 
+        - UNKNOWN             Unknown; "take a guess"
+        - UINT8               Unsigned 8-bit integers
+        - UINT16              Unsigned 16-bit integers
+        - UINT32              Unsigned 32-bit integers
+        - SFLOAT16            Signed 16-bit floats
+        - SFLOAT32            Signed 32-bit floats
+        - UNORM8              Normalized unsigned 8-bit integers
+        - UNORM16             Normalized unsigned 16-bit integers
+        - UNORM32             Normalized unsigned 32-bit integers
     """
     UNKNOWN             = 1<<0
-    R8_UINT             = 1<<1
-    R8G8_UINT           = 1<<2
-    R8G8B8_UINT         = 1<<3
-    R8G8B8A8_UINT       = 1<<4
-    R16_UINT            = 1<<5
-    R16G16_UINT         = 1<<6
-    R16G16B16_UINT      = 1<<7
-    R16G16B16A16_UINT   = 1<<8
-    R32_UINT            = 1<<9
-    R32G32_UINT         = 1<<10
-    R32G32B32_UINT      = 1<<11
-    R32G32B32A32_UINT   = 1<<12
-    R16_SFLOAT          = 1<<13
-    R16G16_SFLOAT       = 1<<14
-    R16G16B16_SFLOAT    = 1<<15
-    R16G16B16A16_SFLOAT = 1<<16
-    R32_SFLOAT          = 1<<17
-    R32G32_SFLOAT       = 1<<18
-    R32G32B32_SFLOAT    = 1<<19
-    R32G32B32A32_SFLOAT = 1<<20
+    UINT8               = 1<<1
+    UINT16              = 1<<2
+    UINT32              = 1<<3
+    SFLOAT16            = 1<<4
+    SFLOAT32            = 1<<5
+    UNORM8              = 1<<6
+    UNORM16             = 1<<7
+    UNORM32             = 1<<8
 
-    READABLE = R8_UINT | R8G8_UINT | R8G8B8_UINT | R8G8B8A8_UINT | \
-        R16_UINT | R16G16_UINT | R16G16B16_UINT | R16G16B16A16_UINT | \
-        R32_UINT | R32G32_UINT | R32G32B32_UINT | R32G32B32A32_UINT | \
-        R16_SFLOAT | R16G16_SFLOAT | R16G16B16_SFLOAT | R16G16B16A16_SFLOAT | \
-        R32_SFLOAT | R32G32_SFLOAT | R32G32B32_SFLOAT | R32G32B32A32_SFLOAT
+    # Lump together any integer-type values
+    I8 = UINT8 | UNORM8
+    I16 = UINT16 | UNORM16
+    I32 = UINT32 | UNORM32
 
-    UINT8 = R8_UINT | R8G8_UINT | R8G8B8_UINT | R8G8B8A8_UINT
-    UINT16 = R16_UINT | R16G16_UINT | R16G16B16_UINT | R16G16B16A16_UINT
-    UINT32 = R32_UINT | R32G32_UINT | R32G32B32_UINT | R16G16B16A16_UINT
-    SFLOAT16 = R16_SFLOAT | R16G16_SFLOAT | R16G16B16_SFLOAT | R16G16B16A16_SFLOAT
-    SFLOAT32 = R32_SFLOAT | R32G32_SFLOAT | R32G32B32_SFLOAT | R32G32B32A32_SFLOAT
+    UNORM = UNORM8 | UNORM16 | UNORM32
 
-    WRITABLE_PNG = UINT8 | UINT16
+    READABLE = UINT8 | UINT16 | UINT32 | UNORM8 | UNORM16 | UNORM32 | SFLOAT16 | SFLOAT32
+
+    WRITABLE_PNG = UINT8 | UINT16 | UNORM8 | UNORM16
     WRITABLE_TIF = SFLOAT16 | SFLOAT32
     WRITABLE_EXR = SFLOAT16 | SFLOAT32
-
-    C1 = R8_UINT | R16_UINT | R32_UINT | R16_SFLOAT | R32_SFLOAT
-    C2 = R8G8_UINT | R16G16_UINT | R32G32_UINT | R16G16_SFLOAT | R32G32_SFLOAT
-    C3 = R8G8B8_UINT | R16G16B16_UINT | R32G32B32_UINT | R16G16B16_SFLOAT | R32G32B32_SFLOAT
-    C4 = R8G8B8A8_UINT | R16G16B16A16_UINT | R32G32B32A32_UINT | R16G16B16A16_SFLOAT | R32G32B32A32_SFLOAT
 
 class ImageFileFormat(IntEnum):
     # TODO: Needs to be expanded after investigating iio support

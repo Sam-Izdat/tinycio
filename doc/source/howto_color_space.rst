@@ -19,13 +19,13 @@ A little more explicit:
     from tinycio import ColorImage
 
     # Load sRGB image from disk
-    im_in = ColorImage.load('my/image.png', graphics_format='R8G8B8_UINT', color_space='SRGB')
+    im_in = ColorImage.load('my/image.png', graphics_format='UINT8', color_space='SRGB')
 
     # Convert the image
     im_out = im_in.to_color_space('ACES2065_1')
 
     # Save as 32-bit-per-channel EXR file
-    im_out.save('my/image.exr', graphics_format='R32G32B32_SFLOAT')
+    im_out.save('my/image.exr', graphics_format='SFLOAT32')
 
 This is functionally equivalent to:
 
@@ -45,7 +45,7 @@ This is functionally equivalent to:
     im_out = ColorSpace.convert(im_in, cs_in, cs_out)
 
     # Save as 32-bit-per-channel EXR file
-    fmt_out = fsio.GraphicsFormat.R32G32B32_SFLOAT
+    fmt_out = fsio.GraphicsFormat.SFLOAT32
     fsio.save_image(im_out, 'my/image.exr', graphics_format=fmt_out)
 
 .. note:: 

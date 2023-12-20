@@ -104,7 +104,7 @@ class ColorImage(torch.Tensor):
         elif torch.is_tensor(args[0]) and len(args[0].size()) == 3 and args[0].size(0) == 3:
             ten = args[0].float().clone().detach().requires_grad_(False)
         else:
-            raise TypeError("ColorImage must be a [C=3, H, W] sized image tensor.")
+            raise TypeError("ColorImage must be a [C=3, H, W] sized image tensor/array.")
 
         # There is a reason why this has to be here, in this order, and why this hangs "color_space" on "new".
         # Setting it prematurely on cls will yeet the metadata of the instance being transitioned to a new cs.
@@ -254,10 +254,10 @@ class ColorImage(torch.Tensor):
         if graphics_format == GraphicsFormat.UNKNOWN:
             if ext & ImageFileFormat.UINT8:
                 # if file format is conventionally 8 bpc, assume uint8
-                graphics_format = GraphicsFormat.R8G8B8_UINT
+                graphics_format = GraphicsFormat.UINT8
             else:
                 # otherwise assume float32
-                graphics_format = GraphicsFormat.R32G32B32_SFLOAT
+                graphics_format = GraphicsFormat.SFLOAT32
         if color_space == ColorSpace.Variant.UNKNOWN:
             if ext & ImageFileFormat.UINT8:
                 # if file format is conventionally 8 bpc, assume sRGB gamma curve
@@ -266,7 +266,8 @@ class ColorImage(torch.Tensor):
                 # otherwise assume sRGB linear
                 color_space=ColorSpace.Variant.SRGB_LIN
 
-        return ColorImage(truncate_image(load_image(fp)), color_space=color_space)
+        im = load_image(fp, graphics_format=graphics_format)
+        return ColorImage(truncate_image(im), color_space=color_space)
 
     def save(self, fp:str, graphics_format:Union[str, GraphicsFormat]=GraphicsFormat.UNKNOWN) -> bool:
         """
@@ -437,7 +438,7 @@ class MonoImage(torch.Tensor):
         elif torch.is_tensor(args[0]) and len(args[0].size()) == 3 and args[0].size(0) == 1:
             ten = args[0].float().clone().detach().requires_grad_(False)
         else:
-            raise TypeError("MonoImage must be a [C=1, H, W] sized image tensor.")
+            raise TypeError("MonoImage must be a [C=1, H, W] sized image tensor/array.")
         return super(MonoImage, cls).__new__(cls, ten)
 
     def info(self, printout=True) -> Union[bool, str]:

@@ -8,7 +8,7 @@ White balance an image.
 .. highlight:: text
 .. code-block:: text
 
-   usage: white_balance.py [-h] --source-white SOURCE_WHITE --target-white TARGET_WHITE
+   usage: tcio-white-balance [-h] --source-white SOURCE_WHITE --target-white TARGET_WHITE
                            [--color-space] [--igf ] [--ogf ]
                            input output
 
@@ -46,9 +46,9 @@ White balance an image.
 .. highlight:: shell
 .. code-block:: shell
 
-   $ ./white_balance.py -s auto -t EQUAL_ENERGY -c srgb_linear env_map.exr env_map_bal.exr
+   $ tcio-white-balance -s auto -t EQUAL_ENERGY -c srgb_linear env_map.exr env_map_bal.exr
 
 .. rubric:: Script:
 
-.. literalinclude:: ../../scripts/white_balance.py
+.. literalinclude:: ../../src/tinycio/scripts/white_balance.py
    :language: python

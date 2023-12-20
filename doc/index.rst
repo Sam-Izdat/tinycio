@@ -16,7 +16,7 @@ Getting started
 * Recommended: set up a clean Python environment
 * `Install PyTorch  as instructed here <https://pytorch.org/get-started/locally/>`_
 * Run :code:`pip install tinycio`
-* Run :code:`imageio_download_bin freeimage` (`iio docs on fi <https://imageio.readthedocs.io/en/stable/_autosummary/imageio.plugins.freeimage.html#module-imageio.plugins.freeimage>`_)
+* Run :code:`tcio-setup` (installs freeimage binaries; `iio docs on fi <https://imageio.readthedocs.io/en/stable/_autosummary/imageio.plugins.freeimage.html#module-imageio.plugins.freeimage>`_)
 
 About 
 -----

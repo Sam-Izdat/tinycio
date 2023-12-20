@@ -10,9 +10,16 @@ class Float2(np.ndarray):
     """
     def __new__(cls, *args):
         if len(args) == 1:
-            if isinstance(args[0], np.ndarray) and len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 2:
+            if isinstance(args[0], list) or isinstance(args[0], tuple):
+                assert len(args[0]) == 2, "list/tuple must have 2 components"
+                arr = np.asarray([args[0][0], args[0][1]], dtype=np.float32).view(cls)
+            elif isinstance(args[0], np.ndarray):
+                assert len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 2, \
+                    "numpy array must be sized [C=2] or [C=2, H=1, W=1]"
                 arr = np.asarray(args[0].squeeze(), dtype=np.float32).view(cls)
-            elif torch.is_tensor(args[0]) and len(args[0].squeeze().size()) == 1 and args[0].size(0) == 2:
+            elif torch.is_tensor(args[0]):
+                assert len(args[0].squeeze().size()) == 1 and args[0].size(0) == 2, \
+                    "torch tensor must be sized [C=2] or [C=2, H=1, W=1]"
                 value = args[0].squeeze().float().cpu()
                 arr = np.asarray([value[0].item(), value[1].item()], dtype=np.float32).view(cls)
             else:
@@ -23,6 +30,14 @@ class Float2(np.ndarray):
         else: 
             raise TypeError("Float2 only accepts 1 or 2 arguments.")
         return arr
+
+    def list(self) -> list:
+        """Returns values as Python list"""
+        return [self[0], self[1]]
+
+    def tuple(self) -> tuple:
+        """Returns values as Python tuple"""
+        return (self[0], self[1])
 
     @property
     def x(self) -> float:
@@ -51,15 +66,19 @@ class Float2(np.ndarray):
 
     @staticmethod
     def zero():
+        """Returns numeric type filled with zero values"""
         return Float2(0., 0.)
     @staticmethod
     def one():
+        """Returns numeric type filled with one values"""
         return Float2(1., 1.)
     @staticmethod
     def x_axis():
+        """Returns numeric type with x-axis set to 1 and all others to 0"""
         return Float2(1., 0.)
     @staticmethod
     def y_axis():
+        """Returns numeric type with y-axis set to 1 and all others to 0"""
         return Float2(0., 1.)
 
     @property
@@ -186,9 +205,16 @@ class Float3(np.ndarray):
     """
     def __new__(cls, *args):
         if len(args) == 1:
-            if isinstance(args[0], np.ndarray) and len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 3:
+            if isinstance(args[0], list) or isinstance(args[0], tuple):
+                assert len(args[0]) == 3, "list/tuple must have 3 components"
+                arr = np.asarray([args[0][0], args[0][1], args[0][2]], dtype=np.float32).view(cls)
+            elif isinstance(args[0], np.ndarray):
+                assert len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 3, \
+                    "numpy array must be sized [C=3] or [C=3, H=1, W=1]"
                 arr = np.asarray(args[0].squeeze(), dtype=np.float32).view(cls)
-            elif torch.is_tensor(args[0]) and len(args[0].squeeze().size()) == 1 and args[0].size(0) == 3:
+            elif torch.is_tensor(args[0]):
+                assert len(args[0].squeeze().size()) == 1 and args[0].size(0) == 3, \
+                    "torch tensor must be sized [C=3] or [C=3, H=1, W=1]"
                 value = args[0].squeeze().float().cpu()
                 arr = np.asarray([value[0].item(), value[1].item(), value[2].item()], dtype=np.float32).view(cls)
             else:
@@ -199,6 +225,15 @@ class Float3(np.ndarray):
         else: 
             raise TypeError("Float3 only accepts 1 or 3 arguments.")
         return arr
+
+    def list(self) -> list:
+        """Returns values as Python list"""
+        return [self[0], self[1], self[2]]
+
+    def tuple(self) -> tuple:
+        """Returns values as Python tuple"""
+        return (self[0], self[1], self[2])
+
     @property
     def x(self) -> float:
         return self[0]
@@ -237,18 +272,23 @@ class Float3(np.ndarray):
         self[2] = value
     @staticmethod
     def zero():
+        """Returns numeric type filled with zero values"""
         return Float3(0., 0., 0.)
     @staticmethod
     def one():
+        """Returns numeric type filled with one values"""
         return Float3(1., 1., 1.)
     @staticmethod
     def x_axis():
+        """Returns numeric type with x-axis set to 1 and all others to 0"""
         return Float3(1., 0., 0.)
     @staticmethod
     def y_axis():
+        """Returns numeric type with y-axis set to 1 and all others to 0"""
         return Float3(0., 1., 0.)
     @staticmethod
     def z_axis():
+        """Returns numeric type with z-axis set to 1 and all others to 0"""
         return Float3(0., 0., 1.)
 
     @property
@@ -731,9 +771,16 @@ class Float4(np.ndarray):
     """
     def __new__(cls, *args):
         if len(args) == 1:
-            if isinstance(args[0], np.ndarray) and len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 4:
+            if isinstance(args[0], list) or isinstance(args[0], tuple):
+                assert len(args[0]) == 4, "list/tuple must have 4 components"
+                arr = np.asarray([args[0][0], args[0][1], args[0][2], args[0][3]], dtype=np.float32).view(cls)
+            elif isinstance(args[0], np.ndarray):
+                assert len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 4, \
+                    "numpy array must be sized [C=4] or [C=4, H=1, W=1]"
                 arr = np.asarray(args[0].squeeze(), dtype=np.float32).view(cls)
-            elif torch.is_tensor(args[0]) and len(args[0].squeeze().size()) == 1 and args[0].size(0) == 4:
+            elif torch.is_tensor(args[0]):
+                assert len(args[0].squeeze().size()) == 1 and args[0].size(0) == 4, \
+                    "torch tensor must be sized [C=4] or [C=4, H=1, W=1]"
                 value = args[0].squeeze().float().cpu()
                 arr = np.asarray([value[0].item(), value[1].item(), value[2].item(), value[3].item()], dtype=np.float32).view(cls)
             else:
@@ -744,6 +791,15 @@ class Float4(np.ndarray):
         else: 
             raise TypeError("Float4 only accepts 1 or 4 arguments.")
         return arr
+
+    def list(self) -> list:
+        """Returns values as Python list"""
+        return [self[0], self[1], self[2], self[3]]
+
+    def tuple(self) -> tuple:
+        """Returns values as Python tuple"""
+        return (self[0], self[1], self[2], self[3])
+
     @property
     def x(self) -> float:
         return self[0]
@@ -794,18 +850,23 @@ class Float4(np.ndarray):
         self[3] = value
     @staticmethod
     def zero():
+        """Returns numeric type filled with zero values"""
         return Float4(0., 0., 0., 0.)
     @staticmethod
     def one():
+        """Returns numeric type filled with one values"""
         return Float4(1., 1., 1., 1.)
     @staticmethod
     def x_axis():
+        """Returns numeric type with x-axis set to 1 and all others to 0"""
         return Float4(1., 0., 0., 0.)
     @staticmethod
     def y_axis():
+        """Returns numeric type with y-axis set to 1 and all others to 0"""
         return Float4(0., 1., 0., 0.)
     @staticmethod
     def z_axis():
+        """Returns numeric type with z-axis set to 1 and all others to 0"""
         return Float4(0., 0., 1., 0.)
 
     @property
@@ -2164,9 +2225,16 @@ class Int2(np.ndarray):
     """
     def __new__(cls, *args):
         if len(args) == 1:
-            if isinstance(args[0], np.ndarray) and len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 2:
+            if isinstance(args[0], list) or isinstance(args[0], tuple):
+                assert len(args[0]) == 2, "list/tuple must have 2 components"
+                arr = np.asarray([args[0][0], args[0][1]], dtype=np.int32).view(cls)
+            elif isinstance(args[0], np.ndarray):
+                assert len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 2, \
+                    "numpy array must be sized [C=2] or [C=2, H=1, W=1]"
                 arr = np.asarray(args[0].squeeze(), dtype=np.int32).view(cls)
-            elif torch.is_tensor(args[0]) and len(args[0].squeeze().size()) == 1 and args[0].size(0) == 2:
+            elif torch.is_tensor(args[0]):
+                assert len(args[0].squeeze().size()) == 1 and args[0].size(0) == 2, \
+                    "torch tensor must be sized [C=2] or [C=2, H=1, W=1]"
                 value = args[0].squeeze().int().cpu()
                 arr = np.asarray([value[0].item(), value[1].item()], dtype=np.int32).view(cls)
             else:
@@ -2177,6 +2245,15 @@ class Int2(np.ndarray):
         else: 
             raise TypeError("Int2 only accepts 1 or 2 arguments.")
         return arr
+
+    def list(self) -> list:
+        """Returns values as Python list"""
+        return [self[0], self[1]]
+
+    def tuple(self) -> tuple:
+        """Returns values as Python tuple"""
+        return (self[0], self[1])
+
     @property
     def x(self) -> int:
         return self[0]
@@ -2327,9 +2404,16 @@ class Int3(np.ndarray):
     """
     def __new__(cls, *args):
         if len(args) == 1:
-            if isinstance(args[0], np.ndarray) and len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 3:
+            if isinstance(args[0], list) or isinstance(args[0], tuple):
+                assert len(args[0]) == 3, "list/tuple must have 3 components"
+                arr = np.asarray([args[0][0], args[0][1], args[0][2]], dtype=np.int32).view(cls)
+            elif isinstance(args[0], np.ndarray):
+                assert len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 3, \
+                    "numpy array must be sized [C=3] or [C=3, H=1, W=1]"
                 arr = np.asarray(args[0].squeeze(), dtype=np.int32).view(cls)
-            elif torch.is_tensor(args[0]) and len(args[0].squeeze().size()) == 1 and args[0].size(0) == 3:
+            elif torch.is_tensor(args[0]):
+                assert len(args[0].squeeze().size()) == 1 and args[0].size(0) == 3, \
+                    "torch tensor must be sized [C=3] or [C=3, H=1, W=1]"
                 value = args[0].squeeze().int().cpu()
                 arr = np.asarray([value[0].item(), value[1].item(), value[2].item()], dtype=np.int32).view(cls)
             else:
@@ -2340,6 +2424,15 @@ class Int3(np.ndarray):
         else: 
             raise TypeError("Int3 only accepts 1 or 3 arguments.")
         return arr
+
+    def list(self) -> list:
+        """Returns values as Python list"""
+        return [self[0], self[1], self[2]]
+
+    def tuple(self) -> tuple:
+        """Returns values as Python tuple"""
+        return (self[0], self[1], self[2])
+
     @property
     def x(self) -> int:
         return self[0]
@@ -2857,9 +2950,16 @@ class Int4(np.ndarray):
     """
     def __new__(cls, *args):
         if len(args) == 1:
-            if isinstance(args[0], np.ndarray) and len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 4:
+            if isinstance(args[0], list) or isinstance(args[0], tuple):
+                assert len(args[0]) == 4, "list/tuple must have 3 components"
+                arr = np.asarray([args[0][0], args[0][1], args[0][2], args[0][3]], dtype=np.int32).view(cls)
+            elif isinstance(args[0], np.ndarray):
+                assert len(args[0].squeeze().shape) == 1 and args[0].shape[0] == 4, \
+                    "numpy array must be sized [C=4] or [C=4, H=1, W=1]"
                 arr = np.asarray(args[0].squeeze(), dtype=np.int32).view(cls)
-            elif torch.is_tensor(args[0]) and len(args[0].squeeze().size()) == 1 and args[0].size(0) == 4:
+            elif torch.is_tensor(args[0]):
+                assert len(args[0].squeeze().size()) == 1 and args[0].size(0) == 4, \
+                    "torch tensor must be sized [C=4] or [C=4, H=1, W=1]"
                 value = args[0].squeeze().int().cpu()
                 arr = np.asarray([value[0].item(), value[1].item(), value[2].item(), value[3].item()], dtype=np.int32).view(cls)
             else:
@@ -2870,6 +2970,15 @@ class Int4(np.ndarray):
         else: 
             raise TypeError("Int4 only accepts 1 or 4 arguments.")
         return arr
+
+    def list(self) -> list:
+        """Returns values as Python list"""
+        return [self[0], self[1], self[2], self[3]]
+
+    def tuple(self) -> tuple:
+        """Returns values as Python tuple"""
+        return (self[0], self[1], self[2], self[3])
+
     @property
     def x(self) -> int:
         return self[0]

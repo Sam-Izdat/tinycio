@@ -1,6 +1,6 @@
 [project]
 name = "tinycio"
-version = "0.5.4"
+version = "0.6.0"
 authors = [
   { name="Sam Izdat", email="ghsamizdat@gmail.com" },
 ]
@@ -18,6 +18,14 @@ dependencies = [
   "toml>=0.10",
   "tqdm>=4.64"
 ]
+
+[project.scripts]
+tcio-setup          = "tinycio.scripts.post_install:main_cli"
+tcio-color2color    = "tinycio.scripts.color2color:main_cli"
+tcio-hdr-codec      = "tinycio.scripts.hdr_codec:main_cli"
+tcio-img2cube       = "tinycio.scripts.img2cube:main_cli"
+tcio-white-balance  = "tinycio.scripts.white_balance:main_cli"
+
 [tool.tinycio_about]
 release = "a"
 
