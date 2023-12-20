@@ -17,6 +17,9 @@ class TestNumerics(unittest.TestCase):
 		self.assertTrue(np.array_equal(Float3(1.,2.,3.), np.array([1.,2.,3.])))
 		self.assertTrue(np.array_equal(Float4(1.,2.,3.,4.), np.array([1.,2.,3.,4.])))
 
+		self.assertTrue(np.array_equal(Float4([1.,2.,3.,4.]), np.array([1.,2.,3.,4.])))
+		self.assertTrue(np.array_equal(Float4((1.,2.,3.,4.)), np.array([1.,2.,3.,4.])))
+
 		self.assertTrue(np.array_equal(Int2(1,2), np.array([1,2])))
 		self.assertTrue(np.array_equal(Int3(1,2,3), np.array([1,2,3])))
 		self.assertTrue(np.array_equal(Int4(1,2,3,4), np.array([1,2,3,4])))

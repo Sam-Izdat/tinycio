@@ -34,14 +34,16 @@ def main_cli():
         default='srgb',
         metavar='',
         choices=[
-            'cie_xyz', 'cie_xyy', 'srgb', 'srgb_linear',
-            'rec709', 'rec2020', 'dci_p3', 'display_p3',
+            'cie_xyz', 'cie_xyy', 'srgb', 'srgb_lin',
+            'rec709', 'rec2020', 'rec2020_lin', 
+            'dci_p3', 'dci_p3_lin', 'display_p3',
             'acescg', 'aces2065_1', 'lms', 'hsl', 'hsv',
             'oklab', 'cielab'],
-        help='Color space of input and output (default: %(default)s) \n' + \
+        help='Input color space\n' + \
             'CHOICES:\n' + \
-            '    cie_xyz, cie_xyy, srgb, srgb_linear \n' + \
-            '    rec709, rec2020, dci_p3, display_p3 \n' + \
+            '    cie_xyz, cie_xyy, srgb, srgb_lin, \n' + \
+            '    rec709, rec2020, rec_2020_lin, \n' + \
+            '    dci_p3, dci_p3_lin, display_p3, \n' + \
             '    acescg, aces2065_1, lms, hsl, hsv \n' + \
             '    oklab, cielab'
         )

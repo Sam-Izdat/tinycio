@@ -1,5 +1,10 @@
 Release notes
 =============
+.. rubric:: v 0.6.1 a - Dec. 2023
+
+* Corrected linear color space definitions for scripts
+* Updated numerics unit test
+
 .. rubric:: v 0.6.0 a - Dec. 2023
 
 * **API change**: simplified :class:`~.fsio.GraphicsFormat` (options now just UINT8, SFLOAT32, UNORM8, etc).
