@@ -3,7 +3,7 @@
     You can adapt this file completely to your liking, but it should at least
     contain the root `toctree` directive.
 
-tinycio
+tinycio |version|
 =======================================
 
 .. rubric:: color stuff for people who don't science too good
@@ -21,7 +21,6 @@ Getting started
 About 
 -----
 Release version 
-|version|
 |release|
 
 .. rubric:: Requires

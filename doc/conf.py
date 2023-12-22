@@ -27,7 +27,7 @@ release = '???'
 with open('../pyproject.toml', 'r') as f:
     data = toml.load(f)
     version = data['project']['version']
-    release = data['tool']['tinycio_about']['release']
+    release = version + ' ' + data['tool']['tinycio_about']['release']
 
 
 
