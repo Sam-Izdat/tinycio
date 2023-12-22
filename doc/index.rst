@@ -25,7 +25,8 @@ Release version
 
 .. only:: html
 
-    `PDF version <./tinycio.pdf>`_
+    * `PDF manual <./tinycio.pdf>`_
+    * `Previous versions <https://github.com/Sam-Izdat/tinycio-docs/releases>`_
 
 .. rubric:: Requires
 
