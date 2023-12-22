@@ -6,6 +6,25 @@
 tinycio |version|
 =======================================
 
+.. first toctree should be here for PDF docs
+
+.. toctree::
+    :maxdepth: 4
+    :caption: How to:
+    :hidden:
+
+    source/howto_hello
+    source/howto_wavelength
+    source/howto_color_value
+    source/howto_color_space
+    source/howto_hdr
+    source/howto_tone_map
+    source/howto_white_balance
+    source/howto_ccbasic
+    source/howto_apply_lut
+    source/howto_bake_lut
+    source/howto_autograde
+
 .. rubric:: color stuff for people who don't science too good
 
 A primitive, lightweight Python color library for PyTorch-involved projects. It implements color space conversion, tone mapping, LUT usage and creation, basic color correction and color balancing, and HDR-LDR encoding/decoding. 
@@ -13,10 +32,10 @@ A primitive, lightweight Python color library for PyTorch-involved projects. It 
 Getting started
 ---------------
 
-* Recommended: set up a clean Python environment
-* `Install PyTorch  as instructed here <https://pytorch.org/get-started/locally/>`_
-* Run :code:`pip install tinycio`
-* Run :code:`tcio-setup` (installs freeimage binaries; `iio docs on fi <https://imageio.readthedocs.io/en/stable/_autosummary/imageio.plugins.freeimage.html#module-imageio.plugins.freeimage>`_)
+#. Recommended: set up a clean Python environment
+#. `Install PyTorch  as instructed here <https://pytorch.org/get-started/locally/>`_
+#. Run :code:`pip install tinycio`
+#. Run :code:`tcio-setup` (installs freeimage binaries; `iio docs on fi <https://imageio.readthedocs.io/en/stable/_autosummary/imageio.plugins.freeimage.html#module-imageio.plugins.freeimage>`_)
 
 About 
 -----
@@ -30,6 +49,7 @@ Release version
 
 .. rubric:: Requires
 
+- Python >=3.8
 - PyTorch >=2.0 (earlier versions untested)
 - NumPy >=1.21
 - imageio >=2.9 (with PNG-FI FreeImage plugin)
@@ -103,22 +123,6 @@ How to
 
     The :doc:`how-to section <source/howto_hello>` has a brief tutorial on the library's core functionality.
 
-.. toctree::
-    :maxdepth: 4
-    :caption: How to:
-    :hidden:
-
-    source/howto_hello
-    source/howto_wavelength
-    source/howto_color_value
-    source/howto_color_space
-    source/howto_hdr
-    source/howto_tone_map
-    source/howto_white_balance
-    source/howto_ccbasic
-    source/howto_apply_lut
-    source/howto_bake_lut
-    source/howto_autograde
 
 Examples
 --------
