@@ -24,7 +24,7 @@ author = 'Sam Izdat'
 data = None
 version = '???'
 release = '???'
-with open('../../pyproject.toml', 'r') as f:
+with open('../pyproject.toml', 'r') as f:
     data = toml.load(f)
     version = data['project']['version']
     release = data['tool']['tinycio_about']['release']
@@ -58,7 +58,7 @@ html_theme = 'sphinx_rtd_theme'
 html_title = 'the docs'
 html_static_path = ['_static']
 
-html_logo = "../images/tinycio_sm.png"
+html_logo = "images/tinycio_sm.png"
 html_theme_options = {
     'logo_only': True,
     'display_version': False,

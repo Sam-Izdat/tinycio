@@ -6,72 +6,6 @@
 tinycio
 =======================================
 
-
-.. toctree::
-    :maxdepth: 4
-    :caption: How to:
-    :hidden:
-
-    howto_hello
-    howto_wavelength
-    howto_color_value
-    howto_color_space
-    howto_hdr
-    howto_tone_map
-    howto_white_balance
-    howto_ccbasic
-    howto_apply_lut
-    howto_bake_lut
-    howto_autograde
-
-.. toctree::
-    :maxdepth: 4
-    :caption: Examples:
-    :hidden:
-
-    example_sweeps
-    example_image_manip
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Reference:
-    :hidden:
-
-    tinycio
-    about_release_notes
-    about_modules
-    license
-    genindex
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Scripts:
-    :hidden:
-
-    scripts_color2color
-    scripts_hdr_codec
-    scripts_white_balance
-    scripts_img2cube
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Links:
-    :hidden:
-
-    GitHub <https://github.com/Sam-Izdat/tinycio>
-    PyPi <https://pypi.org/project/tinycio/>
-    Docs <https://sam-izdat.github.io/tinycio-docs/>
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Sibling projects:
-    :hidden:
-
-    tinylcm <https://sam-izdat.github.io/tinylcm-docs/>
-    tinypbr <https://sam-izdat.github.io/tinypbr-docs/>
-    tinytex <https://sam-izdat.github.io/tinytex-docs/>
-
-    
 .. rubric:: color stuff for people who don't science too good
 
 A primitive, lightweight Python color library for PyTorch-involved projects. It implements color space conversion, tone mapping, LUT usage and creation, basic color correction and color balancing, and HDR-LDR encoding/decoding. 
@@ -156,8 +90,111 @@ project like `Colour <https://www.colour-science.org/>`_.
 
 .. rubric:: License
 
-:doc:`MIT License <license>` on all original code - see source for details
+:doc:`MIT License <source/license>` on all original code - see source for details
 
+How to
+------
+
+The :doc:`how-to section <source/howto_hello>` has a brief tutorial on the library's core functionality.
+
+.. toctree::
+    :maxdepth: 4
+    :caption: How to:
+    :hidden:
+
+    source/howto_hello
+    source/howto_wavelength
+    source/howto_color_value
+    source/howto_color_space
+    source/howto_hdr
+    source/howto_tone_map
+    source/howto_white_balance
+    source/howto_ccbasic
+    source/howto_apply_lut
+    source/howto_bake_lut
+    source/howto_autograde
+
+Examples
+--------
+
+See: :doc:`examples section <source/example_sweeps>`.
+
+.. toctree::
+    :maxdepth: 4
+    :caption: Examples:
+    :hidden:
+
+    source/example_sweeps
+    source/example_image_manip
+
+
+Reference
+---------
+
+See: :doc:`reference section <source/tinycio>`.
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Reference:
+    :hidden:
+
+    source/tinycio
+    source/about_release_notes
+    source/about_modules
+    source/license
+    genindex
+
+
+Scripts
+-------
+
+The library comes with a few bundled CLI scripts:
+
+* :doc:`tcio-color2color <source/scripts_color2color>`
+* :doc:`tcio-hdr-codec <source/scripts_hdr_codec>`
+* :doc:`tcio-white-balance <source/scripts_white_balance>`
+* :doc:`tcio-img2cube <source/scripts_img2cube>`
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Scripts:
+    :hidden:
+
+    source/scripts_color2color
+    source/scripts_hdr_codec
+    source/scripts_white_balance
+    source/scripts_img2cube
+
+Links
+-----
+
+* `GitHub <https://github.com/Sam-Izdat/tinycio>`_
+* `PyPi <https://pypi.org/project/tinycio/>`_
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Links:
+    :hidden:
+
+    GitHub <https://github.com/Sam-Izdat/tinycio>
+    PyPi <https://pypi.org/project/tinycio/>
+    Docs <https://sam-izdat.github.io/tinycio-docs/>
+
+Sibling projects
+----------------
+
+* `tinylcm <https://sam-izdat.github.io/tinylcm-docs/>`_
+* `tinypbr <https://sam-izdat.github.io/tinypbr-docs/>`_
+* `tinytex <https://sam-izdat.github.io/tinytex-docs/>`_
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Sibling projects:
+    :hidden:
+
+    tinylcm <https://sam-izdat.github.io/tinylcm-docs/>
+    tinypbr <https://sam-izdat.github.io/tinypbr-docs/>
+    tinytex <https://sam-izdat.github.io/tinytex-docs/>
 
 Special thanks
 --------------
