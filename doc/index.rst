@@ -6,24 +6,11 @@
 tinycio |version|
 =======================================
 
-.. first toctree should be here for PDF docs
-
 .. toctree::
-    :maxdepth: 4
-    :caption: How to:
     :hidden:
+    :maxdepth: 4
 
-    source/howto_hello
-    source/howto_wavelength
-    source/howto_color_value
-    source/howto_color_space
-    source/howto_hdr
-    source/howto_tone_map
-    source/howto_white_balance
-    source/howto_ccbasic
-    source/howto_apply_lut
-    source/howto_bake_lut
-    source/howto_autograde
+    self
 
 .. rubric:: color stuff for people who don't science too good
 
@@ -123,6 +110,22 @@ How to
 
     The :doc:`how-to section <source/howto_hello>` has a brief tutorial on the library's core functionality.
 
+.. toctree::
+    :maxdepth: 4
+    :caption: How to:
+    :hidden:
+
+    source/howto_hello
+    source/howto_wavelength
+    source/howto_color_value
+    source/howto_color_space
+    source/howto_hdr
+    source/howto_tone_map
+    source/howto_white_balance
+    source/howto_ccbasic
+    source/howto_apply_lut
+    source/howto_bake_lut
+    source/howto_autograde
 
 Examples
 --------
