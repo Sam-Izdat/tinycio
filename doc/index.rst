@@ -23,6 +23,10 @@ About
 Release version 
 |release|
 
+.. only:: html
+
+    `PDF version <./tinycio.pdf>`_
+
 .. rubric:: Requires
 
 - PyTorch >=2.0 (earlier versions untested)
@@ -94,7 +98,9 @@ project like `Colour <https://www.colour-science.org/>`_.
 How to
 ------
 
-The :doc:`how-to section <source/howto_hello>` has a brief tutorial on the library's core functionality.
+.. only:: html
+
+    The :doc:`how-to section <source/howto_hello>` has a brief tutorial on the library's core functionality.
 
 .. toctree::
     :maxdepth: 4
@@ -116,7 +122,9 @@ The :doc:`how-to section <source/howto_hello>` has a brief tutorial on the libra
 Examples
 --------
 
-See: :doc:`examples section <source/example_sweeps>`.
+.. only:: html
+
+    See: :doc:`examples section <source/example_sweeps>`.
 
 .. toctree::
     :maxdepth: 4
@@ -130,7 +138,9 @@ See: :doc:`examples section <source/example_sweeps>`.
 Reference
 ---------
 
-See: :doc:`reference section <source/tinycio>`.
+.. only:: html
+
+    See: :doc:`reference section <source/tinycio>`.
 
 .. toctree::
     :maxdepth: 2
@@ -147,12 +157,14 @@ See: :doc:`reference section <source/tinycio>`.
 Scripts
 -------
 
-The library comes with a few bundled CLI scripts:
+.. only:: html
 
-* :doc:`tcio-color2color <source/scripts_color2color>`
-* :doc:`tcio-hdr-codec <source/scripts_hdr_codec>`
-* :doc:`tcio-white-balance <source/scripts_white_balance>`
-* :doc:`tcio-img2cube <source/scripts_img2cube>`
+    The library comes with a few bundled CLI scripts:
+
+    * :doc:`tcio-color2color <source/scripts_color2color>`
+    * :doc:`tcio-hdr-codec <source/scripts_hdr_codec>`
+    * :doc:`tcio-white-balance <source/scripts_white_balance>`
+    * :doc:`tcio-img2cube <source/scripts_img2cube>`
 
 .. toctree::
     :maxdepth: 2
