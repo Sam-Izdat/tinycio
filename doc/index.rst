@@ -1,20 +1,16 @@
-.. tinycio documentation master file, created by
-    sphinx-quickstart on Fri Dec  1 17:02:44 2023.
-    You can adapt this file completely to your liking, but it should at least
-    contain the root `toctree` directive.
-
 tinycio |version|
 =======================================
-
-.. toctree::
-    :hidden:
-    :maxdepth: 4
-
-    self
 
 .. rubric:: color stuff for people who don't science too good
 
 A primitive, lightweight Python color library for PyTorch-involved projects. It implements color space conversion, tone mapping, LUT usage and creation, basic color correction and color balancing, and HDR-LDR encoding/decoding. 
+
+.. uncomment for PDF build ("only" directive is ignored):
+
+.. .. toctree::
+..     :hidden:
+
+..     self
 
 Getting started
 ---------------
@@ -199,21 +195,21 @@ Links
     PyPi <https://pypi.org/project/tinycio/>
     Docs <https://sam-izdat.github.io/tinycio-docs/>
 
-Sibling projects
-----------------
+.. Sibling projects
+.. ----------------
 
-* `tinylcm <https://sam-izdat.github.io/tinylcm-docs/>`_
-* `tinypbr <https://sam-izdat.github.io/tinypbr-docs/>`_
-* `tinytex <https://sam-izdat.github.io/tinytex-docs/>`_
+.. * `tinylcm <https://sam-izdat.github.io/tinylcm-docs/>`_
+.. * `tinypbr <https://sam-izdat.github.io/tinypbr-docs/>`_
+.. * `tinytex <https://sam-izdat.github.io/tinytex-docs/>`_
 
-.. toctree::
-    :maxdepth: 2
-    :caption: Sibling projects:
-    :hidden:
+.. .. toctree::
+..     :maxdepth: 2
+..     :caption: Sibling projects:
+..     :hidden:
 
-    tinylcm <https://sam-izdat.github.io/tinylcm-docs/>
-    tinypbr <https://sam-izdat.github.io/tinypbr-docs/>
-    tinytex <https://sam-izdat.github.io/tinytex-docs/>
+..     tinylcm <https://sam-izdat.github.io/tinylcm-docs/>
+..     tinypbr <https://sam-izdat.github.io/tinypbr-docs/>
+..     tinytex <https://sam-izdat.github.io/tinytex-docs/>
 
 Special thanks
 --------------

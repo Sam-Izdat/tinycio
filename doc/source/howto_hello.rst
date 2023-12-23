@@ -17,6 +17,7 @@ A basic example:
         print(e) # your error handling here
 
 This package is divided into four user modules: 
+
 * :py:mod:`tinycio` - for all main color-related features and types
 * :py:mod:`tinycio.fsio` - for loading from and saving to the file system
 * :py:mod:`tinycio.util` - for miscellaneous color and non-color utility functions

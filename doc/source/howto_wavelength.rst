@@ -10,7 +10,7 @@ Look up a wavelength
     col_xyz = Spectral.wl_to_xyz(490)   # Float3([0.0320, 0.2080, 0.4652])
 
     # Look up a wavelength as sRGB color
-    col_srgb = Spectral.wl_to_srgb(490) # Float3([0.0320, 0.2080, 0.4652])
+    col_srgb = Spectral.wl_to_srgb(490) # Float3([0.    , 0.9257, 1.    ])
 
 .. image:: ../images/howto_spectral/490nm.png
     :width: 25
