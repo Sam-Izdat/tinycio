@@ -4,20 +4,7 @@ from enum import IntEnum
 
 class GraphicsFormat(IntEnum):
     """
-    The graphics format of an image file to be saved or loaded. Available options are:
-    
-    .. highlight:: text
-    .. code-block:: text
-
-        - UNKNOWN             Unknown; "take a guess"
-        - UINT8               Unsigned 8-bit integers
-        - UINT16              Unsigned 16-bit integers
-        - UINT32              Unsigned 32-bit integers
-        - SFLOAT16            Signed 16-bit floats
-        - SFLOAT32            Signed 32-bit floats
-        - UNORM8              Normalized unsigned 8-bit integers
-        - UNORM16             Normalized unsigned 16-bit integers
-        - UNORM32             Normalized unsigned 32-bit integers
+    The graphics format of an image file to be saved or loaded. For a list of available options, see :ref:`ref_graphics_formats`.
     """
     UNKNOWN             = 1<<0
     UINT8               = 1<<1

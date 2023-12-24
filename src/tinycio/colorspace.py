@@ -21,40 +21,7 @@ class ColorSpace:
     """
     class Variant(IntEnum):
         """
-        Color space enum. Available options are:        
-
-        .. highlight:: text
-        .. code-block:: text
-
-            - UNKNOWN       # no color space specified - flag for "take a guess"
-            - NONCOLOR      # non-color data or color space not applicable
-            - CIE_XYZ       # CIE 1931 XYZ color space
-            - CIE_XYY       # xyY color space derived from above
-            - SRGB          # sRGB with gamma curve
-            - SRGB_LIN      # scene-linear sRGB/Rec. 709 - no gamma curve   
-            - REC709        # almost the same as sRGB, different gamma
-            - REC2020       # a wide-gamut RGB color space
-            - REC2020_LIN   # scene-linear Rec. 2020
-            - DCI_P3        # a wide-gamut RGB color space
-            - DCI_P3_LIN    # scene-linear DCI-P3
-            - DISPLAY_P3    # some apple DCI P3 clone with different gamma, because apple
-            - ACESCG        # AP1 primaries; scene-linear, less suitable for color grading
-            - ACESCC        # AP1 primaries; logarithmic, more suitable for color grading
-            - ACESCCT†      # AP1 primaries; logarithmic, more suitable for color grading 
-            - ACES2065_1††  # AP0 primaries; scene-linear†††, core ACES color space                                
-            - LMS           # "long, medium, short" / tristimulus
-            - OKLAB         # perceptual; Björn Ottosson's improvement over CIELAB
-            - CIELAB        # perceptual; for "characterization of colored surfaces and dyes"
-            - CIELUV†††     # perceptual; for "characterization of color displays"
-            - HSV           # "hue, saturation, value"; assumed sRGB-relative
-            - HSL           # "hue, saturation, lightness"; assumed sRGB-relative
-            - OKHSV††††     # perceptually linear HSV based on OKLAB
-            - OKHSL††††     # perceptually linear HSL based on OKLAB
-
-            †       - not yet implemented
-            ††      - scene-linear but still bad for rendering - can have negative values
-            †††     - currently disabled
-            ††††    - intended for color picking; not implemented for image tensor conversion
+        Color space enum. For a list of available options, see :ref:`ref_color_spaces`.
         """
         UNKNOWN     = 1<<0  
         NONCOLOR    = 1<<1  

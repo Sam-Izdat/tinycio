@@ -1,4 +1,4 @@
-tinycio |version|
+tinycio
 =======================================
 
 .. rubric:: color stuff for people who don't science too good
@@ -22,13 +22,21 @@ Getting started
 
 About 
 -----
-Release version 
-|release|
+
+.. only:: latex
+
+    Version 
+    |release|
 
 .. only:: html
 
-    * `PDF manual <./tinycio.pdf>`_
-    * `Previous versions <https://github.com/Sam-Izdat/tinycio-docs/releases>`_
+    .. hlist::
+        :columns: 4
+    
+        * v |release|
+        * `PDF manual <./tinycio.pdf>`_
+        * `Previous versions <https://github.com/Sam-Izdat/tinycio-docs/releases>`_
+        * :doc:`Release notes <source/about_release_notes>`
 
 .. rubric:: Requires
 
@@ -152,6 +160,7 @@ Reference
     :hidden:
 
     source/tinycio
+    source/ref_cs_gfx
     source/about_release_notes
     source/about_modules
     source/license
