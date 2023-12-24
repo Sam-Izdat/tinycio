@@ -62,8 +62,6 @@ Color spaces
     *   - OKHSL [4]_
         - perceptually linear HSL based on OKLAB
 
-.. rubric:: Notes
-
 .. [1] not yet implemented
 .. [2] scene-linear but still bad for rendering - can have negative values
 .. [3] currently disabled

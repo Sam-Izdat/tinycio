@@ -203,8 +203,7 @@ A few problem cases are illustrated below.
     **Right**: Image desaturated trying to match hair and background color 
     (photographs by Esma Atak [4]_ and Sadettin Dogan [5]_ respectively)
 
-
-.. rubric:: Footnotes
+-----
 
 .. [1] Simon Stålenhag's `graphic novel <https://en.wikipedia.org/wiki/The_Electric_State_(graphic_novel)>`_ and `website <https://www.simonstalenhag.se/>`_
 .. [2] `saso ucitelj's Pexels page <https://www.pexels.com/@saso-ucitelj-814183799/>`_
