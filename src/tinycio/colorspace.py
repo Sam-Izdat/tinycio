@@ -213,12 +213,14 @@ class ColorSpace:
         Unless otherwise noted or required by specification (e.g. ACES), we assume D65 white point.
 
         .. warning::
+
             Tone mapping is not included, so converting the color space of HDR values to  
             an LDR-designated color space will not automatically reduce dynamic range. For example, 
             taking an HDR image from :code:`ACESCG` (AP1) to :code:`SRGB` will yield the sRGB 
             gamma curve, but values outside the required range must still be tone mapped or clamped beforehand.
 
         .. warning::
+
             Cylindrical transformations (HSL, HSV) should be given input in [0, 1] linear sRGB range 
             (or equivalent). This is not strictly enforced but input outside this range may yield 
             unpredictable results or *NaN* values.
@@ -470,6 +472,7 @@ class ColorSpace:
         Convert color space from CIELAB to CIE XYZ.
         
         .. note::
+
             Assumes D65 standard illuminant.
 
         :param lab: Input CIELAB color space tensor
@@ -526,6 +529,7 @@ class ColorSpace:
         Converts CIE XYZ to CIELUV. 
         
         .. note::
+
             Assumes D65 standard illuminant.
 
         :param image: A pytorch tensor of shape (3, n_pixels_x, n_pixels_y) in which the channels are X, Y, Z
@@ -584,6 +588,7 @@ class ColorSpace:
         Converts CIELUV to CIE XYZ. 
         
         .. note::
+
             Assumes D65 standard illuminant.
 
         :param image: A pytorch tensor of shape (3, n_pixels_x, n_pixels_y) in which the channels are L, U, V
@@ -696,6 +701,7 @@ class ColorSpace:
         Transform sRGB image tensor to sRGB-relative HSL. 
         
         .. note::
+
             expects non-linear sRGB w/ gamma curve as input
 
         :param rgb: Input sRGB image tensor
@@ -752,6 +758,7 @@ class ColorSpace:
         Transform sRGB-relative HSL image tensor to sRGB. 
         
         .. note::
+
             returns non-linear sRGB w/ gamma curve as output
 
         :param hsl: Input HSL image tensor
@@ -803,9 +810,11 @@ class ColorSpace:
         Transform sRGB image tensor to sRGB-relative HSV. 
         
         .. note::
+
             expects non-linear sRGB w/ gamma curve as input
 
         .. warning::
+
             input tensor will be clamped to [0, 1] range
 
         :param rgb: Input sRGB image tensor
@@ -854,6 +863,7 @@ class ColorSpace:
         Transform sRGB-relative HSV image tensor to sRGB. 
         
         .. note::
+        
             returns non-linear sRGB w/ gamma curve as output
 
         :param hsv: Input HSV image tensor

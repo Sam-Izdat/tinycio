@@ -1,5 +1,6 @@
 """ 
 .. warning::
+
     The FloatX/IntX types here are Python wrappers around numpy arrays.
     They are glacially slow and should only be used for convenience 
     inside of Python scope and well outside of any high-traffic loops.

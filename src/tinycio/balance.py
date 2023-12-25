@@ -223,7 +223,8 @@ class WhiteBalance:
         Estimate the dominant illuminant of an environment map or a target image directly and return its 
         approximate CIE xy chromaticity coordinates (white point).
 
-        .. warning:: 
+        .. warning::
+         
             This is a lazy method that just averages the pixels in the image tensor. 
             There is no spherical mapping, nor PCA, nor any serious attempt to analyze the image.
 

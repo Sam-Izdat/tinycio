@@ -100,6 +100,7 @@ class ColorCorrection:
         of the source image matches the target. 
 
         .. note::
+
             Images need to be in *ACEScc* color space.
 
         :param im_source: Source image tensor in *ACEScc* color space. Values must be in range [0, 1].
@@ -386,6 +387,7 @@ class ColorCorrection:
         Bake color correction to a CUBE LUT. 
 
         .. note::
+        
             Regardless of working color space, the LUT will be limited to a [0, 1] range of values.
 
         :param lut_size: Size of the LUT. Range [4, 512].

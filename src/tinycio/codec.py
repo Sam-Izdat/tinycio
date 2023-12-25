@@ -28,6 +28,7 @@ class Codec:
         Encode HDR floating point RGB data to LOGLUV for 32bpp (RGBA) image file. 
 
         .. note::
+
             3 channels in, 4 channels out.
 
         :param im: HDR [C=3, H, W] sized image tensor
@@ -54,6 +55,7 @@ class Codec:
         Decode LOGLUV to HDR floating point RGB data. 
 
         .. note::
+        
             4 channels in, 3 channels out.
 
         :param im: LOGLUV encoded [C=4, H, W] sized image tensor (4 channels)

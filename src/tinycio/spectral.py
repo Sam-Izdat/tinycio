@@ -131,6 +131,7 @@ class Spectral:
         Precision is limited to interpolated 5nm increments.
 
         .. note::
+
             These coordinates will often fall outside the sRGB gamut. 
             Direct color space conversion will yield invalid sRGB values.
 
@@ -180,6 +181,7 @@ class Spectral:
         clamped to [0, 1] range, with sRGB gamma curve.
 
         .. note::
+        
             Wolfram Alpha doesn't quite agree, but it's rather close. This produces a 
             plausible-looking spectrum, but there is probably some missing (pre?) normalization step. 
             Take the RGB outputs with a grain of salt.

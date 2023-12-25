@@ -75,12 +75,14 @@ class ColorImage(torch.Tensor):
     This is the most hands-off abstraction, as it automatically handles color space conversion as needed.
 
     .. note::
+
         All transformative methods will create a new :class:`ColorImage` instance without altering the 
         current state. PyTorch methods and operations will work as expected but will return with 
         the color space set to UNKNOWN. Exceptions include :code:`.clamp()`, :code:`.lerp()`, 
         :code:`.minimum()`, and :code:`.maximum()`, which will retain the current state for convenience.
 
     .. note:: 
+
         Assumes size/shape [C, H, W] for both PyTorch tensor or NumPy array inputs.
 
     :param param0: [C=3, H, W] sized tensor/array
@@ -314,6 +316,7 @@ class ColorImage(torch.Tensor):
         Apply tone mapping and return as new :class:`ColorImage`.
 
         .. note::
+
             Any needed color space conversion will be handled automatically.
 
         :param tone_mapper: the tone mapper to use
@@ -356,6 +359,7 @@ class ColorImage(torch.Tensor):
         White balance the image and return as new :class:`ColorImage`.
 
         .. note::
+
             Any needed color space conversion will be handled automatically.
             
         :param source_white: Source white point - can be any of: 
@@ -426,6 +430,7 @@ class MonoImage(torch.Tensor):
     Can be converted to :class:`ColorImage` with :code:`ColorImage(mono_im.repeat(3,1,1))`.
 
     .. note:: 
+    
         Assumes size/shape [C, H, W] for both PyTorch tensor or NumPy array inputs.
 
     :param param0: [C=1, H, W] sized tensor/array

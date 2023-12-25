@@ -55,6 +55,7 @@ class ToneMapping:
         space for the chosen tone mapper.
 
         .. note::
+
             :code:`ACESCG` tone mapping is performed on AP1 primaries and expects input in the 
             :code:`ACESCG` color space. All other tone mappers expect :code:`SRGB_LIN`.
             The :code:`tone_map()` method of :class:`ColorImage` handles this conversion automatically.
@@ -169,9 +170,10 @@ class ToneMapping:
     @classmethod
     def _aces_fitted(cls, im:torch.Tensor):
         """
-        Apply ACES Filmic (fitted version) tone mapping.
+        Apply ACES (fitted version) tone mapping.
         
         .. note::
+        
             expects [C, H, W] input in ACESCcg color space, return ACEScg image tensor
 
         :param torch.Tensor im: Input image tensor.
