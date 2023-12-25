@@ -17,9 +17,6 @@ class TestNumerics(unittest.TestCase):
         self.assertTrue(np.array_equal(Float3(1.,2.,3.), np.array([1.,2.,3.])))
         self.assertTrue(np.array_equal(Float4(1.,2.,3.,4.), np.array([1.,2.,3.,4.])))
 
-        self.assertTrue(np.array_equal(Float4([1.,2.,3.,4.]), np.array([1.,2.,3.,4.])))
-        self.assertTrue(np.array_equal(Float4((1.,2.,3.,4.)), np.array([1.,2.,3.,4.])))
-
         self.assertTrue(np.array_equal(Int2(1,2), np.array([1,2])))
         self.assertTrue(np.array_equal(Int3(1,2,3), np.array([1,2,3])))
         self.assertTrue(np.array_equal(Int4(1,2,3,4), np.array([1,2,3,4])))
@@ -32,6 +29,56 @@ class TestNumerics(unittest.TestCase):
         self.assertTrue(np.array_equal(Int2(1), np.array([1,1])))
         self.assertTrue(np.array_equal(Int3(1), np.array([1,1,1])))
         self.assertTrue(np.array_equal(Int4(1), np.array([1,1,1,1])))
+
+    def test_tuple(self):  
+        self.assertTrue(np.array_equal(Float2((1.,2.)), np.array([1.,2.])))
+        self.assertTrue(np.array_equal(Float3((1.,2.,3.)), np.array([1.,2.,3.])))
+        self.assertTrue(np.array_equal(Float4((1.,2.,3.,4.)), np.array([1.,2.,3.,4.])))
+
+        self.assertTrue(np.array_equal(Int2((1,2)), np.array([1,2])))
+        self.assertTrue(np.array_equal(Int3((1,2,3)), np.array([1,2,3])))
+        self.assertTrue(np.array_equal(Int4((1,2,3,4)), np.array([1,2,3,4])))
+
+        self.assertTrue(Float2((1.,2.)).tuple() == (1.,2.))
+        self.assertTrue(Float3((1.,2.,3.)).tuple() == (1.,2.,3.))
+        self.assertTrue(Float4((1.,2.,3.,4.)).tuple() == (1.,2.,3.,4.))
+
+        self.assertTrue(Int2((1.,2.)).tuple() == (1.,2.))
+        self.assertTrue(Int3((1.,2.,3.)).tuple() == (1.,2.,3.))
+        self.assertTrue(Int4((1.,2.,3.,4.)).tuple() == (1.,2.,3.,4.))
+
+        self.assertTrue(Float2((1,2)).tuple() == (1,2))
+        self.assertTrue(Float3((1,2,3)).tuple() == (1,2,3))
+        self.assertTrue(Float4((1,2,3,4)).tuple() == (1,2,3,4))
+
+        self.assertTrue(Int2((1.,2.)).tuple() == (1.,2.))
+        self.assertTrue(Int3((1.,2.,3.)).tuple() == (1.,2.,3.))
+        self.assertTrue(Int4((1.,2.,3.,4.)).tuple() == (1.,2.,3.,4.))
+
+    def test_list(self):
+        self.assertTrue(np.array_equal(Float2([1.,2.]), np.array([1.,2.])))
+        self.assertTrue(np.array_equal(Float3([1.,2.,3.]), np.array([1.,2.,3.])))
+        self.assertTrue(np.array_equal(Float4([1.,2.,3.,4.]), np.array([1.,2.,3.,4.])))
+        
+        self.assertTrue(np.array_equal(Int2([1,2]), np.array([1,2])))
+        self.assertTrue(np.array_equal(Int3([1,2,3]), np.array([1,2,3])))
+        self.assertTrue(np.array_equal(Int4([1,2,3,4]), np.array([1,2,3,4])))
+
+        self.assertTrue(Float2([1.,2.]).list() == [1.,2.])
+        self.assertTrue(Float3([1.,2.,3.]).list() == [1.,2.,3.])
+        self.assertTrue(Float4([1.,2.,3.,4.]).list() == [1.,2.,3.,4.])
+
+        self.assertTrue(Int2([1,2]).list() == [1,2])
+        self.assertTrue(Int3([1,2,3]).list() == [1,2,3])
+        self.assertTrue(Int4([1,2,3,4]).list() == [1,2,3,4])
+
+        self.assertTrue(Float2([1,2]).list() == [1,2])
+        self.assertTrue(Float3([1,2,3]).list() == [1,2,3])
+        self.assertTrue(Float4([1,2,3,4]).list() == [1,2,3,4])
+
+        self.assertTrue(Int2([1.,2.]).list() == [1.,2.])
+        self.assertTrue(Int3([1.,2.,3.]).list() == [1.,2.,3.])
+        self.assertTrue(Int4([1.,2.,3.,4.]).list() == [1.,2.,3.,4.])
 
     def test_np(self):
         self.assertTrue(np.array_equal(Float2(np.array([1.,2.])), np.array([1.,2.])))

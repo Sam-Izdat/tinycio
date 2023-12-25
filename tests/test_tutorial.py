@@ -33,10 +33,10 @@ class TestCodec(unittest.TestCase):
             # ---------------------------------------------------------------------
 
             # Look up a wavelength (nm) as CIE XYZ color
-            col_xyz = Spectral.wl_to_xyz(490)   # Float3([0.0320, 0.2080, 0.4652])
+            col_xyz = Spectral.wl_to_xyz(490)
 
             # Look up a wavelength as sRGB color
-            col_srgb = Spectral.wl_to_srgb(490) # Float3([0.0320, 0.2080, 0.4652])
+            col_srgb = Spectral.wl_to_srgb(490)
 
             # ---------------------------------------------------------------------
 

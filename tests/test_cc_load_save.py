@@ -3,7 +3,7 @@ import numpy as np
 
 from tinycio import ColorCorrection
 
-class TestCodec(unittest.TestCase):
+class TestLoadSave(unittest.TestCase):
     
     def setUp(self):
         pass
