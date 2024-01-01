@@ -1,5 +1,12 @@
 Release notes
 =============
+
+.. rubric:: v 0.6.2 a - Dec. 2023
+
+* Fixed color space conversion bugs resulting from clipping values
+* Fixed color correction bug: midtone saturation was being assigned wrong values
+* Added better transforms for REC2020/REC2020_LIN and DCI_P3/DCI_P3_LIN - fixed DCI chromatic adaptation
+
 .. rubric:: v 0.6.1 a - Dec. 2023
 
 * Corrected linear color space definitions for scripts

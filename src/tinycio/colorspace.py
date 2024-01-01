@@ -49,7 +49,7 @@ class ColorSpace:
         OKHSL       = 1<<23
 
         SCENE_LINEAR    = SRGB_LIN | REC2020_LIN | DCI_P3_LIN | ACESCG | ACES2065_1 | CIE_XYZ
-        PERCEPTUAL      = OKLAB | CIELAB | CIELUV
+        PERCEPTUAL      = OKLAB | CIELAB | CIELUV | OKHSL | OKHSV
         CYLINDRICAL     = HSL | HSV | OKHSL | OKHSV
 
         GAMUT_SRGB      = SRGB | SRGB_LIN | REC709 | HSL | HSV
@@ -69,7 +69,7 @@ class ColorSpace:
         WP_CCT_6000     = ACESCG | ACESCC | ACESCCT | ACES2065_1
 
         MODEL_RGB       = SRGB | SRGB_LIN | REC709 | REC2020 | REC2020_LIN | DCI_P3 | DCI_P3_LIN | DISPLAY_P3 | \
-            ACESCG | ACESCC | ACESCCT | ACES2065_1
+                        ACESCG | ACESCC | ACESCCT | ACES2065_1
         MODEL_CIE       = CIE_XYZ | CIE_XYY | CIELAB | CIELUV
         MODEL_CAM       = 0
         MODEL_YUV       = 0
@@ -85,14 +85,14 @@ class ColorSpace:
         # FIXME: LUV doesn't quite match expected values, needs further testing
 
     mat_xyz_to_srgb = [
-        [ 3.2409699419,-1.5373831776,-0.4986107603],
-        [-0.9692436363, 1.8759675015, 0.0415550574],
-        [ 0.0556300797,-0.2039769589, 1.0569715142]]
+        [3.24096994190452134, -1.53738317757009346, -0.498610760293003284],
+        [-0.969243636280879826, 1.87596750150772067, 0.0415550574071756125],
+        [0.0556300796969936084, -0.203976958888976564, 1.05697151424287856]]
 
     mat_srgb_to_xyz = [
-        [ 0.4124564, 0.3575761, 0.1804375],
-        [ 0.2126729, 0.7151522, 0.0721750],
-        [ 0.0193339, 0.1191920, 0.9503041]]
+        [0.412390799265959481, 0.357584339383877964, 0.180480788401834288],
+        [0.212639005871510358, 0.715168678767755927, 0.072192315360733715],
+        [0.0193308187155918507, 0.119194779794625988, 0.950532152249660581]]
 
     mat_srgb_to_acescg = [
         [ 0.6130974024, 0.3395231462, 0.04737945141],
@@ -126,15 +126,29 @@ class ColorSpace:
         [-0.0420569547, 1.04205695,   3.37864801e-11],
         [-0.0196375546,-0.0786360454, 1.0982736]] 
 
+    # NOTE: No chromatic adaptation
     mat_srgb_to_dcip3 = [
-        [ 0.86857974,   0.128919139,  0.00250112193],
-        [ 0.0345404103, 0.961811386,  0.00364820339],
-        [ 0.0167714291, 0.0710399976, 0.912188574]]
+        [0.868579739716132409,  0.128919138460847047,  0.00250112182302054368],
+        [0.0345404102543194426, 0.961811386361919975,  0.0036482033837605824],
+        [0.0167714290414502718, 0.0710399977868858352, 0.912188573171663893]]
 
+    # NOTE: No chromatic adaptation
     mat_dcip3_to_srgb = [
-        [ 1.15751641,  -0.154962379, -0.0025540282],
-        [-0.0415000715, 1.04556792,  -0.00406785158],
-        [-0.018050039, -0.0785782724, 1.09662831]]
+        [ 1.15751640619975871,  -0.154962378073857756, -0.00255402812590095854],
+        [-0.0415000715306859699, 1.04556792307969925,  -0.00406785154901328463],
+        [-0.0180500389562539583,-0.0785782726530290654, 1.09662831160928302]]
+
+    # NOTE: No chromatic adaptation
+    mat_dcip3_to_xyz = [
+        [ 0.445169815564552417,    0.277134409206777664,  0.172282669815564564],
+        [ 0.209491677912730539,    0.721595254161043636,  0.0689130679262258258],
+        [-3.63410131696985616e-17, 0.0470605600539811521, 0.907355394361973415]]
+
+    # NOTE: No chromatic adaptation
+    mat_xyz_to_dcip3 = [
+        [2.7253940304917328, -1.01800300622718496, -0.440163195190036463],
+        [-0.795168025808764195, 1.689732054843624, 0.0226471906084774533],
+        [0.0412418913957000325, -0.0876390192158623825, 1.10092937864632191]]
 
     mat_srgb_to_rec2020 = [
         [ 0.627403896,  0.329283039,  0.0433130657],
@@ -146,13 +160,23 @@ class ColorSpace:
         [-0.124550475, 1.1328999,   -0.00834942258],
         [-0.0181507633,-0.100578898, 1.11872966]]
 
-    # NOTE: DOES NOT include "D60"/D65 white point conversion
+    mat_rec2020_to_xyz = [
+        [0.636958048301291, 0.144616903586208, 0.168880975164172],
+        [0.262700212011267, 0.677998071518871, 0.059301716469862],
+        [4.99410657446607e-17, 0.0280726930490874, 1.06098505771079]]
+
+    mat_xyz_to_rec2020 = [
+        [1.71665118797127, -0.355670783776393, -0.25336628137366],
+        [-0.666684351832489, 1.61648123663494, 0.0157685458139111],
+        [0.0176398574453108, -0.0427706132578085, 0.942103121235474]]
+
+    # NOTE: No chromatic adaptation
     mat_acescg_to_xyz = [
         [ 0.66245418, 0.13400421, 0.15618769],
         [ 0.27222872, 0.67408177, 0.05368952],
         [-0.00557465, 0.00406073, 1.0103391 ]]
 
-    # NOTE: DOES NOT include "D60"/D65 white point conversion
+    # NOTE: No chromatic adaptation
     mat_xyz_to_acescg = [
         [ 1.64102338, -0.32480329, -0.2364247 ],
         [-0.66366286,  1.61533159,  0.01675635],
@@ -169,6 +193,18 @@ class ColorSpace:
         [ 1.01303000, 0.00610531,-0.01497100],
         [ 0.00769823, 0.99816500,-0.00503203],
         [-0.00284131, 0.00468516, 0.92450700]]
+
+    # NOTE: For CIE XYZ color
+    mat_d65_to_dci = [
+        [0.976578896646979768, -0.0154362646984919742, -0.016686021704209866],
+        [-0.0256896658505145926, 1.02853916787996963, -0.00378517365630504153],
+        [-0.00570574587417104179, 0.0110778657389971485, 0.871176159390377409]]
+    
+    # NOTE: For CIE XYZ color
+    mat_dci_to_d65 = [
+        [1.02449672775257752, 0.0151635410224165156, 0.0196885223342066827],
+        [0.0256121933371584198, 0.97258630562441342, 0.00471635229242730096],
+        [0.0063842306500876874, -0.012268082736730219, 1.14794244517367791]]
 
     mat_xyz_to_lms = [
         [ 0.8951, 0.2664,-0.1614],
@@ -203,7 +239,6 @@ class ColorSpace:
         [ 1.        ,  0.39633779,  0.21580376],
         [ 1.00000001, -0.10556134, -0.06385417],
         [ 1.00000005, -0.08948418, -1.29148554]]
-
 
     @classmethod
     def convert(cls, im:Union[torch.Tensor, ColorImage], source:Variant, destination:Variant) -> torch.Tensor:
@@ -244,7 +279,6 @@ class ColorSpace:
         assert op & ~cs.DISABLED,       f"Destination color space disabled: {ColorSpace.Variant(op).name}"
 
         err_not_implemented = f"Color space conversion not implemented: {ColorSpace.Variant(ip).name} to {ColorSpace.Variant(op).name}" 
-        if ip & cs.NON_NEGATIVE: im = im.clamp(0., torch.inf)
 
         # Direct path where it matters, loop-de-loop elsewhere
         if ip == cs.SRGB_LIN:
@@ -252,8 +286,8 @@ class ColorSpace:
             elif op == cs.REC709:       im = tf.rec709_oetf(im)
             elif op == cs.REC2020:      im = tf.rec2020_oetf(mm(im, cls.mat_srgb_to_rec2020))
             elif op == cs.REC2020_LIN:  im = mm(im, cls.mat_srgb_to_rec2020)
-            elif op == cs.DCI_P3:       im = tf.dcip3_oetf(mm(im, cls.mat_srgb_to_dcip3))
-            elif op == cs.DCI_P3_LIN:   im = mm(im, cls.mat_srgb_to_dcip3)
+            elif op == cs.DCI_P3:       im = tf.dcip3_oetf(mm(mm(mm(im, cls.mat_srgb_to_xyz), cls.mat_d65_to_dci), cls.mat_xyz_to_dcip3))
+            elif op == cs.DCI_P3_LIN:   im = mm(mm(mm(im, cls.mat_srgb_to_xyz), cls.mat_d65_to_dci), cls.mat_xyz_to_dcip3)
             elif op == cs.DISPLAY_P3:   im = tf.srgb_oetf(mm(im, cls.mat_srgb_to_displayp3))
             elif op == cs.CIE_XYZ:      im = mm(im, cls.mat_srgb_to_xyz)
             elif op == cs.CIE_XYY:      im = cls._xyz_to_xyy(mm(im, cls.mat_srgb_to_xyz))
@@ -272,13 +306,31 @@ class ColorSpace:
             elif op == cs.HSV:          im = cls._rgb_to_hsv(im)
             else:                       im = cls.convert(tf.srgb_eotf(im), cs.SRGB_LIN, op)
         elif ip == cs.REC709:           im = cls.convert(tf.rec709_eotf(im), cs.SRGB_LIN, op)
-        elif ip == cs.REC2020:          im = cls.convert(mm(tf.rec2020_eotf(im), cls.mat_rec2020_to_srgb), cs.SRGB_LIN, op)
-        elif ip == cs.REC2020_LIN:      im = cls.convert(mm(im, cls.mat_rec2020_to_srgb), cs.SRGB_LIN, op)
-        elif ip == cs.DCI_P3:           im = cls.convert(mm(tf.dcip3_eotf(im), cls.mat_dcip3_to_srgb), cs.SRGB_LIN, op)
-        elif ip == cs.DCI_P3_LIN:       im = cls.convert(mm(im, cls.mat_dcip3_to_srgb), cs.SRGB_LIN, op)
+        elif ip == cs.REC2020:          
+            if op == cs.REC2020_LIN:    im = tf.rec2020_eotf(im)
+            elif op == cs.CIE_XYZ:      im = mm(tf.rec2020_eotf(im), cls.mat_rec2020_to_xyz)
+            elif op == cs.SRGB_LIN:     im = mm(tf.rec2020_eotf(im), cls.mat_rec2020_to_srgb)
+            else:                       im = cls.convert(mm(tf.rec2020_eotf(im), cls.mat_rec2020_to_srgb), cs.SRGB_LIN, op)
+        elif ip == cs.REC2020_LIN:      
+            if op == cs.REC2020:        im = tf.rec2020_oetf(im)
+            elif op == cs.CIE_XYZ:      im = mm(im, cls.mat_rec2020_to_xyz)
+            elif op == cs.SRGB_LIN:     im = mm(im, cls.mat_rec2020_to_srgb)
+            else:                       im = cls.convert(mm(im, cls.mat_rec2020_to_srgb), cs.SRGB_LIN, op)
+        elif ip == cs.DCI_P3:           
+            if op == cs.DCI_P3_LIN:     im = tf.dcip3_eotf(im)
+            elif op == cs.CIE_XYZ:      im = mm(mm(tf.dcip3_eotf(im), cls.mat_dcip3_to_xyz), cls.mat_dci_to_d65)
+            else:                       im = cls.convert(mm(mm(tf.dcip3_eotf(im), cls.mat_dcip3_to_xyz), cls.mat_dci_to_d65), cs.CIE_XYZ, op)
+        elif ip == cs.DCI_P3_LIN:       
+            if op == cs.DCI_P3:         im = tf.dcip3_oetf(im)
+            elif op == cs.CIE_XYZ:      im = mm(mm(im, cls.mat_dcip3_to_xyz), cls.mat_dci_to_d65)
+            else:                       im = cls.convert(mm(mm(im, cls.mat_dcip3_to_xyz), cls.mat_dci_to_d65), cs.CIE_XYZ, op)
         elif ip == cs.DISPLAY_P3:       im = cls.convert(mm(tf.srgb_eotf(im), cls.mat_displayp3_to_srgb), cs.SRGB_LIN, op)
         elif ip == cs.CIE_XYZ:
             if   op == cs.CIE_XYY:      im = cls._xyz_to_xyy(im)
+            elif op == cs.REC2020_LIN:  im = mm(im, cls.mat_xyz_to_rec2020)
+            elif op == cs.REC2020:      im = tf.rec2020_oetf(mm(im, cls.mat_xyz_to_rec2020))
+            elif op == cs.DCI_P3_LIN:   im = mm(mm(im, cls.mat_d65_to_dci), cls.mat_xyz_to_dcip3)
+            elif op == cs.DCI_P3:       im = tf.dcip3_oetf(mm(mm(im, cls.mat_d65_to_dci), cls.mat_xyz_to_dcip3))
             elif op == cs.LMS:          im = cls._xyz_to_lms(im)
             elif op == cs.ACESCG:       im = mm(cls._d65_to_d60(im), cls.mat_xyz_to_acescg)
             elif op == cs.CIELAB:       im = cls._xyz_to_cielab(im)
@@ -311,8 +363,6 @@ class ColorSpace:
             if   op == cs.CIE_XYZ:      im = cls._oklab_to_xyz(im)
             else: im = cls.convert(cls._oklab_to_rgb(im), cs.SRGB_LIN, op)
         else: raise Exception(err_not_implemented)
-
-        if op & cs.NON_NEGATIVE: im = im.clamp(0., torch.inf)
 
         return im
 
@@ -453,9 +503,9 @@ class ColorSpace:
         # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
         # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         # SOFTWARE.        
-        x = xyz[0:1] / 0.95047 # 0.950489 
-        y = xyz[1:2] / 1.00000 # 1.000000 
-        z = xyz[2:3] / 1.08883 # 1.088400 
+        x = xyz[0:1] / 0.95047 
+        y = xyz[1:2] / 1.00000 
+        z = xyz[2:3] / 1.08883 
 
         x = cls.__pivot_xyz_to_lab(x)
         y = cls.__pivot_xyz_to_lab(y)
@@ -518,9 +568,9 @@ class ColorSpace:
         y = torch.where(l > 7.9996248, y3, l / 903.3)
         z = torch.where(z3 > 0.008856, z3, ((z * 116.0) - 16.0) / 903.3)
 
-        x = x * 0.95047 # 0.950489
-        y = y * 1.00000 # 1.000000
-        z = z * 1.08883 # 1.088840
+        x = x * 0.95047 
+        y = y * 1.00000 
+        z = z * 1.08883
 
         return torch.cat([x, y, z], dim=0)
 

@@ -499,7 +499,7 @@ class ColorCorrection:
         :return: True if successful
         """
         mihr = self.__range_midtone_color_h
-        misr = self.__range_color_filter_s
+        misr = self.__range_midtone_color_s
         assert mihr[0] <= hue <= mihr[1], f"midtone color hue must be in range [{mihr[0]}, {mihr[1]}]"
         assert misr[0] <= saturation <= misr[1], f"midtone color saturation must be in range [{misr[0]}, {misr[1]}]"
         midtone_color_srgb = col_okhsv_to_srgb(Float3(hue, saturation, 1.))

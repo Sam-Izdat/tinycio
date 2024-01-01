@@ -124,6 +124,29 @@ class TestColorSpaces(unittest.TestCase):
                 print("===========")
             self.assertTrue(compare)
 
+    def test_out_of_gamut(self):
+        testname = "OUT OF GAMUT"
+
+        cs = ColorSpace.Variant
+        # TODO: Needs more...
+        oog_vals = {
+          cs.CIE_XYZ:          Color(0.1, 0.8, 0.2)
+        }
+
+        for k, v in oog_vals.items():
+            orig = v.image(k)
+            res = orig.to_color_space(cs.SRGB).to_color_space(k)
+            compare = self.check_diff(orig, res, self.err_tol_srgb)
+            if not compare or self.print_all:
+                print("===========")
+                print(testname)
+                print("ERROR: ", np.abs(Color(orig)-Color(res)).round(decimals=self.err_round))
+                print(
+                    Color(v).round(decimals=2),"vs", Color(res).round(decimals=2),
+                    "OK" if compare else "**", k.name, "<->", cs.SRGB.name)
+                print("===========")
+
+
     def test_self_consistency_color_class(self):
         testname = "SELF CONSISTENCY - COLOR CLASS"
         # Tolerance set relatively high 
