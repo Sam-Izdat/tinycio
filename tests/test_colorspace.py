@@ -7,7 +7,7 @@ class TestColorSpaces(unittest.TestCase):
     # TODO: need to set tol per CS at some point...
     # rtol is not necessarily a good idea, as the tolerance is 
     # independent of any specific color value
-    err_tol_srgb = 0.01
+    err_tol_srgb = 0.005
     err_tol_gen = 0.025 # some color spaces have larger values than sRGB 
     err_tol_lab = 0.5 # LAB/LUV color can have huge values
 
@@ -96,10 +96,11 @@ class TestColorSpaces(unittest.TestCase):
         cs = ColorSpace.Variant
         col_srgb_lin = Color(0.2, 0.4, 0.7) # sRGB linear
         gt_vals = {
-          cs.SRGB:          Color(0.4862745098, 0.66666666666, 0.85490196078),
+          cs.SRGB:          Color(0.48453, 0.66519, 0.85431),
+          cs.CIE_XYZ:       Color(0.35185, 0.37913, 0.71692),
           cs.REC709:        Color(0.43367, 0.62865, 0.83703),
-          cs.HSL:           Color(0.58524097222, 0.55928, 0.66942),
-          cs.HSV:           Color(0.58524097222, 0.43284, 0.85431),
+          cs.HSL:           Color(0.58524, 0.55928, 0.66942),
+          cs.HSV:           Color(0.58524, 0.43284, 0.85431),
           cs.CIELAB:        Color(67.95644, -2.86733, -29.22882),
           cs.OKLAB:         Color(0.72224, -0.02924, -0.08135),
           cs.ACES2065_1:    Color(0.36504, 0.41079, 0.65867),
@@ -107,12 +108,14 @@ class TestColorSpaces(unittest.TestCase):
           cs.ACESCG:        Color(0.29111, 0.38958, 0.65773),
           cs.REC2020:       Color(0.52805, 0.61997, 0.81587),
           cs.DCI_P3:        Color(0.56384, 0.69821, 0.85856),
-          cs.DISPLAY_P3:    Color(0.52255, 0.66018, 0.83772)
+          cs.DISPLAY_P3:    Color(0.52255, 0.66018, 0.83772),
+          cs.HSL:           Color(0.5852409, 0.55928, 0.66942),
+          cs.HSV:           Color(0.5852409, 0.43284, 0.85431)
         }
 
         for k, v in gt_vals.items():
             res = col_srgb_lin.convert(cs.SRGB_LIN, k)
-            compare = self.check_diff_np(res, v, self.err_tol_lab if k & self.lab else self.err_tol_gen)
+            compare = self.check_diff_np(res, v, self.err_tol_lab if k & self.lab else self.err_tol_srgb)
             if not compare or self.print_all:
                 print("===========")
                 print(testname)
@@ -268,7 +271,7 @@ class TestColorSpaces(unittest.TestCase):
                     if cs_in == cs_test or self.print_all: continue
                     col_out = ColorSpace.convert(col_in, cs_in, cs_test)
                     col_back = ColorSpace.convert(col_out, cs_test, cs_in)
-                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_gen)
+                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_srgb)
                     if not compare:
                         print("===========")
                         print(testname)

@@ -779,7 +779,7 @@ class ColorSpace:
         # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
         # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         # SOFTWARE.
-        rgb = rgb.unsqueeze(0)
+        rgb = rgb.clone().unsqueeze(0)
         cmax, cmax_idx = torch.max(rgb, dim=1, keepdim=True)
         cmin = torch.min(rgb, dim=1, keepdim=True)[0]
         delta = cmax - cmin
@@ -836,7 +836,7 @@ class ColorSpace:
         # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
         # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         # SOFTWARE.
-        hsl = hsl.unsqueeze(0)
+        hsl = hsl.clone().unsqueeze(0)
         hsl_h, hsl_s, hsl_l = hsl[:, 0:1], hsl[:, 1:2], hsl[:, 2:3]
         _c = (-torch.abs(hsl_l * 2. - 1.) + 1) * hsl_s
         _x = _c * (-torch.abs(hsl_h * 6. % 2. - 1) + 1.)
@@ -892,7 +892,7 @@ class ColorSpace:
         # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
         # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         # SOFTWARE.
-        rgb = rgb.clamp(0.,1.).unsqueeze(0)
+        rgb = rgb.clone().clamp(0.,1.).unsqueeze(0)
         cmax, cmax_idx = torch.max(rgb, dim=1, keepdim=True)
         cmin = torch.min(rgb, dim=1, keepdim=True)[0]
         delta = cmax - cmin
@@ -941,7 +941,7 @@ class ColorSpace:
         # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
         # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         # SOFTWARE.
-        hsv = hsv.unsqueeze(0)
+        hsv = hsv.clone().unsqueeze(0)
         hsv_h, hsv_s, hsv_l = hsv[:, 0:1], hsv[:, 1:2], hsv[:, 2:3]
         _c = hsv_l * hsv_s
         _x = _c * (- torch.abs(hsv_h * 6. % 2. - 1) + 1.)
