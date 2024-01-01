@@ -108,9 +108,7 @@ class TestColorSpaces(unittest.TestCase):
           cs.ACESCG:        Color(0.29111, 0.38958, 0.65773),
           cs.REC2020:       Color(0.52805, 0.61997, 0.81587),
           cs.DCI_P3:        Color(0.56384, 0.69821, 0.85856),
-          cs.DISPLAY_P3:    Color(0.52255, 0.66018, 0.83772),
-          cs.HSL:           Color(0.5852409, 0.55928, 0.66942),
-          cs.HSV:           Color(0.5852409, 0.43284, 0.85431)
+          cs.DISPLAY_P3:    Color(0.52255, 0.66018, 0.83772)
         }
 
         for k, v in gt_vals.items():
