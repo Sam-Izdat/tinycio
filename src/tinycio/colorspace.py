@@ -1003,7 +1003,7 @@ class TransferFunction:
         :return: linear sRGB image tensor
         """
         s1 = im / 12.92321
-        s2 = torch.pow((im + 0.055) / 1.055, 12. / 5)
+        s2 = torch.pow((im + 0.055) / 1.055, 2.4)
         return torch.where(im <= 0.04045, s1, s2)
 
     @staticmethod
@@ -1039,7 +1039,7 @@ class TransferFunction:
         :return: Rec. 709 image tensor
         """
         s1 = im * 4.5
-        s2 = torch.pow(im, .4545) * 1.099 - 0.099
+        s2 = torch.pow(im, 1. / 2.2) * 1.099 - 0.099
         return torch.where(im <= 0.018, s1, s2)
 
     @staticmethod

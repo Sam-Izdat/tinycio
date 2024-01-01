@@ -7,8 +7,9 @@ class TestColorSpaces(unittest.TestCase):
     # TODO: need to set tol per CS at some point...
     # rtol is not necessarily a good idea, as the tolerance is 
     # independent of any specific color value
-    err_tol_srgb = 0.005
-    err_tol_gen = 0.025 # some color spaces have larger values than sRGB 
+    err_tol_gt_srgb = 0.005
+    err_tol_self_ldr = 0.002
+    err_tol_self_hdr = 0.025 
     err_tol_lab = 0.5 # LAB/LUV color can have huge values
 
     err_round = 3
@@ -113,7 +114,7 @@ class TestColorSpaces(unittest.TestCase):
 
         for k, v in gt_vals.items():
             res = col_srgb_lin.convert(cs.SRGB_LIN, k)
-            compare = self.check_diff_np(res, v, self.err_tol_lab if k & self.lab else self.err_tol_srgb)
+            compare = self.check_diff_np(res, v, self.err_tol_lab if k & self.lab else self.err_tol_gt_srgb)
             if not compare or self.print_all:
                 print("===========")
                 print(testname)
@@ -137,7 +138,7 @@ class TestColorSpaces(unittest.TestCase):
         for k, v in oog_vals.items():
             orig = v.image(k)
             res = orig.to_color_space(cs.SRGB).to_color_space(k)
-            compare = self.check_diff(orig, res, self.err_tol_srgb)
+            compare = self.check_diff(orig, res, self.err_tol_self_ldr)
             if not compare or self.print_all:
                 print("===========")
                 print(testname)
@@ -169,7 +170,7 @@ class TestColorSpaces(unittest.TestCase):
                     col_in = col_srgb.convert(ColorSpace.Variant.SRGB_LIN, cs_in)
                     col_out = col_in.convert(cs_in, cs_test)
                     col_back = col_out.convert(cs_test, cs_in)
-                    compare = self.check_diff_np(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_gen)
+                    compare = self.check_diff_np(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_self_ldr)
                     if not compare or self.print_all:
                         print("===========")
                         print(testname)
@@ -203,7 +204,7 @@ class TestColorSpaces(unittest.TestCase):
                     col_in = ColorSpace.convert(col_srgb, ColorSpace.Variant.SRGB_LIN, cs_in)
                     col_out = ColorSpace.convert(col_in, cs_in, cs_test)
                     col_back = ColorSpace.convert(col_out, cs_test, cs_in)
-                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_gen)
+                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_self_ldr)
                     if not compare or self.print_all:
                         print("===========")
                         print(testname)
@@ -237,7 +238,7 @@ class TestColorSpaces(unittest.TestCase):
                     col_in = ColorSpace.convert(col_srgb, ColorSpace.Variant.SRGB_LIN, cs_in)
                     col_out = ColorSpace.convert(col_in, cs_in, cs_test)
                     col_back = ColorSpace.convert(col_out, cs_test, cs_in)
-                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_gen)
+                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_self_hdr)
                     if not compare or self.print_all:
                         print("===========")
                         print(testname)
@@ -269,7 +270,7 @@ class TestColorSpaces(unittest.TestCase):
                     if cs_in == cs_test or self.print_all: continue
                     col_out = ColorSpace.convert(col_in, cs_in, cs_test)
                     col_back = ColorSpace.convert(col_out, cs_test, cs_in)
-                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_srgb)
+                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_self_ldr)
                     if not compare:
                         print("===========")
                         print(testname)
@@ -302,7 +303,7 @@ class TestColorSpaces(unittest.TestCase):
                     if cs_in == cs_test: continue
                     col_out = ColorSpace.convert(col_in, cs_in, cs_test)
                     col_back = ColorSpace.convert(col_out, cs_test, cs_in)
-                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_gen)
+                    compare = self.check_diff(col_in, col_back, self.err_tol_lab if cs_in & self.lab else self.err_tol_self_hdr)
                     if not compare:
                         print("===========")
                         print(testname)
