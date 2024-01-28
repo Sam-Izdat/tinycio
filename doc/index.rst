@@ -223,12 +223,13 @@ Links
 Special thanks
 --------------
 
-* Certain color space conversions are from `S2CRNet <https://github.com/stefanLeong/S2CRNet>`_, `convert-colors-py <https://github.com/CairX/convert-colors-py>`_ and `seal-3d <https://github.com/windingwind/seal-3d>`_. 
-* CCT calculation is from `colour-science <https://github.com/colour-science/>`_. 
+* Some color space conversion is from `S2CRNet <https://github.com/stefanLeong/S2CRNet>`_, `convert-colors-py <https://github.com/CairX/convert-colors-py>`_ and `seal-3d <https://github.com/windingwind/seal-3d>`_. 
+* Several matrices were computed with `colorspace-routines <https://github.com/m13253/colorspace-routines>`_.
+* CCT calculation is from `colour-science <https://github.com/colour-science/>`_.
 * The AgX implementation is owed to `Troy James Sobotka <https://github.com/sobotka/AgX-S2O3>`_ and `Liam Collod <https://github.com/MrLixm/AgXc>`_. 
 * Some loss computations are borrowed from `NLUT <https://github.com/semchan/NLUT/tree/main>`_. 
 * Thanks to the `@64 blog <https://64.github.io/tonemapping/>`_ for explaining common tone mapping algorithms. 
-* The white balancing and the von Kries transform were kindly explained by `pbrt <https://pbr-book.org/4ed/Cameras_and_Film/Film_and_Imaging>`_.
+* The white balancing and the von Kries transform were kindly explained by `pbr-book <https://pbr-book.org/4ed/Cameras_and_Film/Film_and_Imaging>`_.
 * The `OKLAB <https://bottosson.github.io/posts/oklab/>`_ color space was developed by `Björn Ottosson <https://bottosson.github.io/>`_
 * The `OKHSL and OKHSV <https://bottosson.github.io/posts/colorpicker/>`_ color space conversions originally by  `Brian Holbrook <https://github.com/holbrookdev>`_
-* `Test photograph <./_images/wb4k6k12k.jpg>`_ from `Bianca Salgado <https://www.pexels.com/@biancasalgado/>`_
+* `Test photograph <./_images/wb4k6k12k.jpg>`_ is from `Bianca Salgado <https://www.pexels.com/@biancasalgado/>`_

@@ -162,9 +162,9 @@ class WhiteBalance:
     @staticmethod
     def wp_from_cct(cct:int) -> Float2:
         """
-        Compute CIE xy chromaticity coordinates (white point) from correlated colour temperature.
+        Compute CIE xy chromaticity coordinates (white point) from correlated color temperature.
 
-        :param cct: Correlated colour temperature in range [4000, 25000]
+        :param cct: Correlated color temperature in range [4000, 25000]
         :return: White point coordinates (CIE xy)
         """    
         # https://github.com/colour-science/colour/blob/develop/colour/temperature/cie_d.py

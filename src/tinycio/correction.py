@@ -113,6 +113,7 @@ class ColorCorrection:
         :param allow_hue_shift: Allow the optimizer to shift the hue.
         :param fit_height: Image tensors will be interpolated to this height for evaluation.
         :param fit_width: Image tensors will be interpolated to this width for evaluation.
+        :param context: The Python context to use (see :py:func:`util.progress_bar`).
         :param device: Device for gradient descent (if None will use input tensor device).
         :return: True when completed
         """

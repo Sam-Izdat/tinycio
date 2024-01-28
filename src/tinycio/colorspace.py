@@ -94,6 +94,7 @@ class ColorSpace:
         [0.212639005871510358, 0.715168678767755927, 0.072192315360733715],
         [0.0193308187155918507, 0.119194779794625988, 0.950532152249660581]]
 
+    # NOTE: Includes "D60"/D65 white point conversion
     mat_srgb_to_acescg = [
         [ 0.6130974024, 0.3395231462, 0.04737945141],
         [ 0.07019372247, 0.916353879, 0.01345239847],
@@ -111,6 +112,7 @@ class ColorSpace:
         [ 0.0897764431, 0.813439429, 0.0967841284],
         [ 0.0175411704, 0.111546553, 0.870912277]]
 
+    # NOTE: Includes "D60"/D65 white point conversion
     mat_aces2065_1_to_srgb = [
         [ 2.52168619,  -1.13413099, -0.387555198],
         [-0.276479914,  1.37271909, -0.0962391736],
@@ -249,10 +251,11 @@ class ColorSpace:
 
         .. warning::
 
-            Tone mapping is not included, so converting the color space of HDR values to  
-            an LDR-designated color space will not automatically reduce dynamic range. For example, 
-            taking an HDR image from :code:`ACESCG` (AP1) to :code:`SRGB` will yield the sRGB 
-            gamma curve, but values outside the required range must still be tone mapped or clamped beforehand.
+            Tone mapping is not automatically included. Thus, converting a wide-gamut color space to one 
+            with a narrower gamut, or converting HDR values to a nominally LDR-designated color space 
+            will not automatically remap out-of-gamut color to in-gamut or reduce dynamic range. 
+            It will likely yield out-of-gamut (positive of negative) or out-of-range values. 
+            These values should still, at some point, be tone mapped or clamped to the desired output range.
 
         .. warning::
 
@@ -990,8 +993,14 @@ class TransferFunction:
         im_srgb = TransferFunction.srgb_oetf(im_linear)
 
     .. note::
+
         These transfer functions are applied automatically by :code:`ColorSpace.convert` when appropriate, 
         but can instead be used explicitly.
+
+    .. note::
+
+        Out-of-gamut values will be accepted, but the values returned may not be well-defined 
+        or meaningful. The goal is only to keep them consistent and out of range.
 
     """
     @staticmethod
@@ -1078,7 +1087,7 @@ class TransferFunction:
         :param im: DCI P3 image tensor 
         :return: linear P3 gamut image tensor
         """
-        return torch.pow(im, 2.6)
+        return torch.pow(torch.abs(im), 2.6) * torch.sign(im)
 
     @staticmethod
     def dcip3_oetf(im:torch.Tensor) -> torch.Tensor: 
@@ -1088,7 +1097,7 @@ class TransferFunction:
         :param im: linear P3 gamut image tensor 
         :return: DCI P3 image tensor
         """
-        return torch.pow(im, 1./2.6)
+        return torch.pow(torch.abs(im), 1./2.6) * torch.sign(im)
 
     @staticmethod
     def log_c_eotf(im:torch.Tensor) -> torch.Tensor:
@@ -1128,8 +1137,7 @@ class TransferFunction:
         :param im: S-Log encoded image tensor
         :return: linear image tensor 
         """
-        x = im.clone()
-        return torch.pow(10.0, ((x - 0.616596 - 0.03) / 0.432699)) - 0.037584
+        return torch.pow(10.0, ((im - 0.616596 - 0.03) / 0.432699)) - 0.037584
 
     @staticmethod
     def s_log_oetf(im:torch.Tensor) -> torch.Tensor:
@@ -1139,5 +1147,4 @@ class TransferFunction:
         :param im: linear image tensor 
         :return: S-Log encoded image tensor
         """
-        x = im.clone()
-        return (0.432699 * torch.log10(x + 0.037584) + 0.616596) + 0.03
+        return (0.432699 * torch.log10(im + 0.037584) + 0.616596) + 0.03

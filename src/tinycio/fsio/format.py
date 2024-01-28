@@ -25,6 +25,7 @@ class GraphicsFormat(IntEnum):
 
     READABLE = UINT8 | UINT16 | UINT32 | UNORM8 | UNORM16 | UNORM32 | SFLOAT16 | SFLOAT32
 
+    # Supported bit depth, by file format
     WRITABLE_PNG = UINT8 | UINT16 | UNORM8 | UNORM16
     WRITABLE_TIF = SFLOAT16 | SFLOAT32
     WRITABLE_EXR = SFLOAT16 | SFLOAT32
@@ -43,7 +44,7 @@ class ImageFileFormat(IntEnum):
     TIF = TIFF
     JPEG = JPG
 
-    # Supported bit depth
+    # Supported file format, by bit depth
     UINT8 = PNG | JPG | WEBP
     UINT16 = PNG
     SFLOAT16 = EXR | TIFF
@@ -59,7 +60,7 @@ class LUTFormat(IntEnum):
         - UNKNOWN
         - CUBE_3D
     """
-    UNKNOWN     = 1<<0  # no color space specified - flag for guessing
+    UNKNOWN     = 1<<0  # no LUT format specified - flag for guessing
     CUBE_3D     = 1<<1  # 3D CUBE LUT https://resolve.cafe/developers/luts/
 
     LUT_3D      = CUBE_3D # | etc for later
