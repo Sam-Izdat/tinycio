@@ -216,9 +216,12 @@ Links
 ..     :caption: Sibling projects:
 ..     :hidden:
 
-..     tinylcm <https://sam-izdat.github.io/tinylcm-docs/>
-..     tinypbr <https://sam-izdat.github.io/tinypbr-docs/>
-..     tinytex <https://sam-izdat.github.io/tinytex-docs/>
+.. tinytex <https://sam-izdat.github.io/tinytex-docs/>
+.. tinypbr <https://sam-izdat.github.io/tinypbr-docs/>
+.. tinylcm <https://sam-izdat.github.io/tinylcm-docs/>
+.. tinysimi <https://sam-izdat.github.io/tinysimi-docs/>
+.. tinytrace <https://sam-izdat.github.io/tinytrace-docs/>
+.. tinyraster <https://sam-izdat.github.io/tinyraster-docs/>
 
 Special thanks
 --------------

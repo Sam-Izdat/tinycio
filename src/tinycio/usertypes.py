@@ -32,10 +32,10 @@ class Chromaticity(Float2):
     :param option1_param1: y component
     :type option1_param1: float
 
-    :param option2_param0: value of both components
+    :param option2_param0: Value of both components.
     :type option2_param0: float
 
-    :param option3_param0: 2-component tensor or array 
+    :param option3_param0: 2-component tensor or array.
         (a 2D tensor/array image is allowed if the number of pixel values is 1)
     :type option3_param0: torch.Tensor | numpy.ndarray | Float2
     """
@@ -87,7 +87,7 @@ class ColorImage(torch.Tensor):
 
     :param param0: [C=3, H, W] sized tensor/array
     :type param0: torch.Tensor | numpy.ndarray
-    :param color_space: the color space of the image
+    :param color_space: Color space of the image.
     :type color_space: str | ColorSpace.Variant
 
     """
@@ -236,10 +236,10 @@ class ColorImage(torch.Tensor):
         """
         Load image from file
 
-        :param fp: image file path
-        :param color_space: image color space
+        :param fp: Image file path.
+        :param color_space: Image color space.
         :type color_space: str | ColorSpace.Variant
-        :param graphics_format: image graphics format
+        :param graphics_format: Image graphics format.
         :type graphics_format: str | fsio.GraphicsFormat
         :return: New :class:`ColorImage` loaded from file.
         """
@@ -278,8 +278,8 @@ class ColorImage(torch.Tensor):
         .. warning:: 
             This will overwrite existing files.
 
-        :param fp: image file path
-        :param graphics_format: image graphics format
+        :param fp: Image file path.
+        :param graphics_format: Image graphics format.
         :type graphics_format: str | fsio.GraphicsFormat
         :return: True if successful
         """
@@ -319,7 +319,7 @@ class ColorImage(torch.Tensor):
 
             Any needed color space conversion will be handled automatically.
 
-        :param tone_mapper: the tone mapper to use
+        :param tone_mapper: Tone mapper to use.
         :type tone_mapper: str | ToneMapping.Variant
         :return: New tone mapped :class:`ColorImage`.
         """
@@ -329,7 +329,7 @@ class ColorImage(torch.Tensor):
         cs_tm = self.color_space
         if tone_mapper == ToneMapping.Variant.ACESCG:
             cs_tm = ColorSpace.Variant.ACESCG
-        else:
+        elif not (self.color_space & ColorSpace.Variant.SCENE_LINEAR & SCENE_LINEAR.Variant.MODEL_RGB):
             cs_tm = ColorSpace.Variant.SRGB_LIN
         res = ColorSpace.convert(ip, source=self.color_space, destination=cs_tm)
         res = ToneMapping.apply(res, tone_mapper=tone_mapper)
@@ -353,8 +353,8 @@ class ColorImage(torch.Tensor):
         return ColorImage(res, color_space=self.color_space)
 
     def white_balance(self, 
-        source_white:Union[str, Float2, Chromaticity, float, WhiteBalance.Illuminant]="auto", 
-        target_white:Union[str, Float2, Chromaticity, float, WhiteBalance.Illuminant]=WhiteBalance.Illuminant.NONE) -> ColorImage:
+        source_white:Union[str, Float2, Chromaticity, int, WhiteBalance.Illuminant]="auto", 
+        target_white:Union[str, Float2, Chromaticity, int, WhiteBalance.Illuminant]=WhiteBalance.Illuminant.NONE) -> ColorImage:
         """
         White balance the image and return as new :class:`ColorImage`.
 
@@ -381,7 +381,7 @@ class ColorImage(torch.Tensor):
         if type(source_white) == str and source_white.strip().upper() == "AUTO":
             source_white = WhiteBalance.wp_from_image(self.to_color_space(ColorSpace.Variant.CIE_XYZ))
         elif type(source_white) in [int, float]:
-            source_white = WhiteBalance.wp_from_cct(source_white)
+            source_white = WhiteBalance.wp_from_cct(int(source_white))
         elif isinstance(source_white, WhiteBalance.Illuminant):
             source_white = WhiteBalance.wp_from_illuminant(source_white)
         elif type(source_white) == str:
@@ -509,9 +509,9 @@ class Color(Float3):
         """
         Convert color value from one color space to another.
 
-        :param source: color space to convert from
+        :param source: Color space to convert from.
         :type source: str | ColorSpace.Variant
-        :param destination: color space to convert to
+        :param destination: Color space to convert to.
         :type destination: str | ColorSpace.Variant
         """
         if source == destination: return self
@@ -557,9 +557,9 @@ class Color(Float3):
         """
         Unsqueeze to a [C=3, H, W] sized PyTorch image tensor.
 
-        :param color_space: the color space of the image
+        :param color_space: Color space of the image.
         :type color_space: str | ColorSpace.Variant
-        :return: Expanded [C=3, H=1, W=1] float32 "image" tensor
+        :return: Expanded [C=3, H=1, W=1] float32 "image" tensor.
         """
         if type(color_space) is str: color_space = ColorSpace.Variant[color_space.strip().upper()]
         assert isinstance(color_space, ColorSpace.Variant), "Invalid color space"

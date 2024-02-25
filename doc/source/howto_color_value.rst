@@ -8,7 +8,7 @@ The tersest way:
 
     from tinycio import Color
 
-    # Convert color from linear sRGB to CIE XYZ
+    # Convert color from linear sRGB to CIE xyY
     result = Color(0.8, 0.4, 0.2).convert('SRGB_LIN', 'CIE_XYY')
     # returns Color([0.4129, 0.3817, 0.4706])
 
