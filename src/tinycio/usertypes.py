@@ -329,7 +329,7 @@ class ColorImage(torch.Tensor):
         cs_tm = self.color_space
         if tone_mapper == ToneMapping.Variant.ACESCG:
             cs_tm = ColorSpace.Variant.ACESCG
-        elif not (self.color_space & ColorSpace.Variant.SCENE_LINEAR & SCENE_LINEAR.Variant.MODEL_RGB):
+        elif not (self.color_space & ColorSpace.Variant.SCENE_LINEAR & ColorSpace.Variant.MODEL_RGB):
             cs_tm = ColorSpace.Variant.SRGB_LIN
         res = ColorSpace.convert(ip, source=self.color_space, destination=cs_tm)
         res = ToneMapping.apply(res, tone_mapper=tone_mapper)

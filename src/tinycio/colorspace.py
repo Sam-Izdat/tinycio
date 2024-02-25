@@ -1013,7 +1013,7 @@ class TransferFunction:
         """
         s1 = im / 12.92321
         s2 = torch.pow((im + 0.055) / 1.055, 2.4)
-        return torch.where(im <= 0.04045, s1, s2)
+        return torch.where(im <= 0.0392857, s1, s2)
 
     @staticmethod
     def srgb_oetf(im:torch.Tensor) -> torch.Tensor:
@@ -1025,7 +1025,7 @@ class TransferFunction:
         """
         s1 = im * 12.92321
         s2 = torch.pow(im, 1. / 2.4) * 1.055 - 0.055
-        return torch.where(im <= 0.0031308, s1, s2)
+        return torch.where(im <= 0.0030399, s1, s2)
 
     @staticmethod
     def rec709_eotf(im:torch.Tensor) -> torch.Tensor:
