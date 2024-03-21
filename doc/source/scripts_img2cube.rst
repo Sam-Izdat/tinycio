@@ -12,11 +12,11 @@ Create a color grading LUT by aligning the appearance of a source image to that 
 .. highlight:: text
 .. code-block:: text
 
-   usage: tcio-img2cube [-h] [--save-lut SAVE_LUT] [--save-image SAVE_IMAGE] [--size SIZE]
-                      [--steps STEPS] [--learning-rate LEARNING_RATE] [--loss-fm LOSS_FM]
-                      [--loss-jsd LOSS_JSD] [--loss-ssim LOSS_SSIM] [--empty-lut] [--igfs ]
-                      [--igft ] [--ogf ] [--device ]
-                      source target
+   usage: tcio-img2cube [-h] [--save-image SAVE_IMAGE] [--save-lut SAVE_LUT]
+                        [--size SIZE] [--steps STEPS] [--learning-rate LEARNING_RATE]
+                        [--strength STRENGTH] [--empty-lut] [--igfs ] [--igft ]
+                        [--ogf ] [--device ]
+                        source target
 
    Apply an automatic color grade to an image and/or generate a color grading CUBE LUT
    by aligning the look of a source image to that of a target image.
@@ -36,8 +36,7 @@ Create a color grading LUT by aligning the appearance of a source image to that 
                            Steps (range [0, 10000]) (default: 1000)
      --learning-rate LEARNING_RATE, -r LEARNING_RATE
                            Learning rate (range [0, 1]) (default: 0.003)
-     --strength STRENGTH
-                           Strength of the effect (range [0, 1]) (default: 1.0)
+     --strength STRENGTH   Strength of the effect (range [0, 1]) (default: 1.0)
      --empty-lut           Initialize empty LUT (instead of linear)
      --igfs []             Source image graphics format (default: unknown)
                            CHOICES:
@@ -48,7 +47,6 @@ Create a color grading LUT by aligning the appearance of a source image to that 
      --ogf []              Output image graphics format (default: unknown)
                            CHOICES: [same as above]
      --device []           Device for gradient descent (default: cuda)
-
 
 .. rubric:: Example usage:
 
