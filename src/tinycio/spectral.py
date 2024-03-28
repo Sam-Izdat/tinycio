@@ -157,7 +157,7 @@ class Spectral:
         return Float3(interpolated_xyz).clip(0., 1.)
 
     @classmethod
-    def wl_to_srgb_linear(cls, wl:float, normalize=True) -> Float3:
+    def wl_to_srgb_linear(cls, wl:float, normalize:bool=False, lum_scale:float=0.25) -> Float3:
         """
         Wavelength (nm) to normalized, approximate linear sRGB color, clamped to [0, 1] range.
 
@@ -167,15 +167,18 @@ class Spectral:
         """
         xyz = cls.wl_to_xyz(wl)
         cs = ColorSpace.Variant
-        srgb = ColorSpace.convert(torch.from_numpy(xyz[..., np.newaxis, np.newaxis]), cs.CIE_XYZ, cs.SRGB_LIN)
+        xyy = ColorSpace.convert(torch.from_numpy(xyz[..., np.newaxis, np.newaxis]), cs.CIE_XYZ, cs.CIE_XYY)
+        xyy[2] *= lum_scale
+        srgb = ColorSpace.convert(xyy, cs.CIE_XYY, cs.SRGB_LIN)
         srgb = Float3(srgb)
         if normalize:
             if np.any(srgb < 0.): srgb -= srgb.min()
             if srgb.sum() > 0.: srgb /= srgb.max()
-        return srgb.clip( 0., 1.)
+
+        return srgb #.clip( 0., 1.)
 
     @classmethod
-    def wl_to_srgb(cls, wl:float, normalize=True) -> Float3:
+    def wl_to_srgb(cls, wl:float, normalize:bool=False, lum_scale:float=0.25) -> Float3:
         """
         Wavelength (nm) to normalized, approximate sRGB color, 
         clamped to [0, 1] range, with sRGB gamma curve.
@@ -190,6 +193,6 @@ class Spectral:
         :param normalize: normalize sRGB color
         :return: sRGB linear color
         """
-        lin = cls.wl_to_srgb_linear(wl, normalize)
+        lin = cls.wl_to_srgb_linear(wl, normalize=normalize, lum_scale=lum_scale)
         ten = torch.from_numpy(lin[..., np.newaxis, np.newaxis])
         return Float3(TransferFunction.srgb_oetf(ten))

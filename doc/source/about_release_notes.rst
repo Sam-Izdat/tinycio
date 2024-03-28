@@ -1,6 +1,11 @@
 Release notes
 =============
 
+.. rubric:: v 0.6.3 a - Mar. 2024
+
+* Minor correction to sRGB transfer functions (insignificant for 8-bit values)
+* Added luminance scaling for spectral wavelength-to-sRGB functions
+
 .. rubric:: v 0.6.2 a - Dec. 2023
 
 * Fixed color space conversion bugs resulting from clipping values

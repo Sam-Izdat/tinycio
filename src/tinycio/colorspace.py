@@ -392,9 +392,11 @@ class ColorSpace:
         :param xyy: Input CIE xyY color space tensor
         :return: CIE XYZ color space tensor
         """
+        eps = 1e-7
         x = xyy[0:1]
         y = xyy[1:2]
         Y = xyy[2:3]
+        y[y <= 0.] = eps
         X = (Y / y) * x
         Z = (Y / y) * (1. - x - y)
         return torch.cat([X, Y, Z], dim=0)
