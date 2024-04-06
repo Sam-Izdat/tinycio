@@ -311,30 +311,51 @@ class ColorImage(torch.Tensor):
         res = ColorImage(res, color_space=color_space)
         return res
 
-    def tone_map(self, tone_mapper:Union[str,ToneMapping.Variant]) -> ColorImage:
+    def tone_map(self, 
+        tone_mapper:Union[str,ToneMapping.Variant], 
+        target_color_space:Union[str,ColorSpace.Variant]=ColorSpace.Variant.SRGB_LIN) -> ColorImage:
         """
         Apply tone mapping and return as new :class:`ColorImage`.
 
         .. note::
 
+            Image will be returned and (if the TMO allows) tone mapped in the desired target color space. 
             Any needed color space conversion will be handled automatically.
 
         :param tone_mapper: Tone mapper to use.
         :type tone_mapper: str | ToneMapping.Variant
+        :param target_color_space: The desired color space the image should be tone mapped for. 
+            Must be a scene-linear RGB color space. The image will be returned in this color space. 
+            If the TMO requires a different color space, the image will converted after tone mapping. 
+            Some TMOs may have been designed with linear sRGB in mind and may not perform as expected 
+            in a different color space.
+        :type target_color_space: str | ColorSpace.Variant
         :return: New tone mapped :class:`ColorImage`.
         """
         if type(tone_mapper) is str: tone_mapper = ToneMapping.Variant[tone_mapper.strip().upper()]
-        assert isinstance(tone_mapper, ToneMapping.Variant), "Invalid tone mapper"
+        if type(target_color_space) is str: target_color_space = ColorSpace.Variant[target_color_space.strip().upper()]
         ip = self.clone()
-        cs_tm = self.color_space
+
+        assert isinstance(tone_mapper, ToneMapping.Variant), "Invalid tone mapper"
+        assert target_color_space & ColorSpace.Variant.SCENE_LINEAR, "target color space expected to be scene-linear"
+        assert (target_color_space & ColorSpace.Variant.SCENE_LINEAR & ColorSpace.Variant.MODEL_RGB), \
+            "target color space must be a in a scene-linear RGB color space"
+        assert self.color_space != ColorSpace.Variant.UNKNOWN and self.color_space != ColorSpace.Variant.NONCOLOR, \
+            "input image must have a valid color space"
+        
+        res = None
+
         if tone_mapper == ToneMapping.Variant.ACESCG:
-            cs_tm = ColorSpace.Variant.ACESCG
-        elif not (self.color_space & ColorSpace.Variant.SCENE_LINEAR & ColorSpace.Variant.MODEL_RGB):
-            cs_tm = ColorSpace.Variant.SRGB_LIN
-        res = ColorSpace.convert(ip, source=self.color_space, destination=cs_tm)
+            res = ColorSpace.convert(ip, source=self.color_space, destination=ColorSpace.Variant.ACESCG)
+        else:
+            res = ColorSpace.convert(ip, source=self.color_space, destination=target_color_space)
+        
         res = ToneMapping.apply(res, tone_mapper=tone_mapper)
-        res = ColorSpace.convert(res, source=cs_tm, destination=self.color_space)
-        return ColorImage(res, color_space=self.color_space)
+
+        if tone_mapper == ToneMapping.Variant.ACESCG:
+            res = ColorSpace.convert(res, source=ColorSpace.Variant.ACESCG, destination=target_color_space)
+
+        return ColorImage(res.clamp(0., 1.), color_space=target_color_space)
 
     def lut(self, lut:Union[str, LookupTable], lut_format=LUTFormat.UNKNOWN) -> ColorImage:
         """

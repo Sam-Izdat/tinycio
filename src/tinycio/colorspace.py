@@ -48,7 +48,7 @@ class ColorSpace:
         OKHSV       = 1<<22
         OKHSL       = 1<<23
 
-        SCENE_LINEAR    = SRGB_LIN | REC2020_LIN | DCI_P3_LIN | ACESCG | ACES2065_1 | CIE_XYZ
+        SCENE_LINEAR    = SRGB_LIN | REC2020_LIN | DCI_P3_LIN | ACESCG | ACES2065_1 | LMS | CIE_XYZ
         PERCEPTUAL      = OKLAB | CIELAB | CIELUV | OKHSL | OKHSV
         CYLINDRICAL     = HSL | HSV | OKHSL | OKHSV
 
@@ -105,6 +105,29 @@ class ColorSpace:
         [ 1.705050993,  -0.6217921206,-0.083258872],
         [-0.1302564175,  1.140804737, -0.01054831907],
         [-0.02400335681,-0.1289689761, 1.152972333]]
+
+    mat_aces_rrt_sat = [
+        [0.970889, 0.026963, 0.002148],
+        [0.010889, 0.986963, 0.002148],
+        [0.010889, 0.026963, 0.962148]]
+
+    mat_aces_rrt_sat_inv = [
+        [ 1.03032  , -0.0280865, -0.0022375],
+        [-0.0113427,  1.01358  , -0.0022375],
+        [-0.0113427, -0.0280865,  1.03943]]
+
+    # sRGB => XYZ => D65_2_D60 => AP1 => RRT_SAT
+    mat_srgb_to_ap1_tm = [
+        [0.59719, 0.35458, 0.04823],
+        [0.07600, 0.90834, 0.01566],
+        [0.02840, 0.13383, 0.83777]]
+
+    # ODT_SAT => XYZ => D60_2_D65 => sRGB
+    mat_ap1_to_srgb_tm = [
+        [ 1.60475, -0.53108, -0.07367],
+        [-0.10208,  1.10813, -0.00605],
+        [-0.00327, -0.07276,  1.07602]
+        ]
 
     # NOTE: Includes "D60"/D65 white point conversion
     mat_srgb_to_aces2065_1 = [
@@ -400,6 +423,14 @@ class ColorSpace:
         X = (Y / y) * x
         Z = (Y / y) * (1. - x - y)
         return torch.cat([X, Y, Z], dim=0)
+
+    @classmethod
+    def _ap1_rrt_sat(cls, im:torch.Tensor) -> torch.Tensor:
+        return mm(im, cls.mat_aces_rrt_sat)
+
+    @classmethod
+    def _ap1_rrt_sat_inv(cls, im:torch.Tensor) -> torch.Tensor:
+        return mm(im, cls.mat_aces_rrt_sat_inv)
 
     @classmethod
     def _xyz_to_lms(cls, xyz:torch.Tensor) -> torch.Tensor:

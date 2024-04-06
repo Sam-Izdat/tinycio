@@ -16,29 +16,43 @@ def main_cli():
             'cie_xyz', 'cie_xyy', 'srgb', 'srgb_lin',
             'rec709', 'rec2020', 'rec2020_lin', 
             'dci_p3', 'dci_p3_lin', 'display_p3',
-            'acescg', 'aces2065_1', 'lms', 'hsl', 'hsv',
-            'oklab', 'cielab'],
+            'acescg', 'aces2065_1', 'acescc', 'lms', 
+            'hsl', 'hsv', 'oklab', 'cielab'],
         metavar='input-color-space', # because bad formatting is bad :(
         help='Input color space\n' + \
             'CHOICES:\n' + \
             '    cie_xyz, cie_xyy, srgb, srgb_lin, \n' + \
             '    rec709, rec2020, rec_2020_lin, \n' + \
             '    dci_p3, dci_p3_lin, display_p3, \n' + \
-            '    acescg, aces2065_1, lms, hsl, hsv \n' + \
-            '    oklab, cielab'
+            '    acescg, acescc, aces2065_1, \n' + \
+            '    lms, hsl, hsv, oklab, cielab'
         )
     parser.add_argument('output', type=str, help='Output image file path')
     parser.add_argument(
         'ocs',
         type=str, 
         choices=[
-            'cie_xyz', 'cie_xyy', 'srgb', 'srgb_linear',
-            'rec709', 'rec2020', 'dci_p3', 'display_p3',
-            'acescg', 'aces2065_1', 'lms', 'hsl', 'hsv',
-            'oklab', 'cielab'],
+            'cie_xyz', 'cie_xyy', 'srgb', 'srgb_lin',
+            'rec709', 'rec2020', 'rec2020_lin', 
+            'dci_p3', 'dci_p3_lin', 'display_p3',
+            'acescg', 'aces2065_1', 'acescc', 'lms', 
+            'hsl', 'hsv', 'oklab', 'cielab'],
         metavar='output-color-space',
         help='Output color space\n' + \
             'CHOICES: [same as above]'  
+        )
+    parser.add_argument(
+        '--tmcs', 
+        type=str, 
+        default="srgb_lin", 
+        const="srgb_lin",
+        nargs='?',
+        choices=['srgb_lin', 'rec2020_lin', 'dci_p3_lin', 'acescg', 'aces2065_1'],
+        metavar='', 
+        help='Tone mapping color space (default: %(default)s)\n' + \
+            'CHOICES:\n' + \
+            '    srgb_lin, rec2020_lin \n' + \
+            '    dci_p3_lin, acescg, aces2065_1 \n'
         )
     parser.add_argument(
         '--igf', 
@@ -101,7 +115,7 @@ def main_cli():
         else:
             im = ColorImage.load(fp_in, color_space=cs_in, graphics_format=gf_in)
 
-        im = im.tone_map(tm) # it's okay to pass "NONE"
+        im = im.tone_map(tm, target_color_space=args.tmcs) # it's okay to pass "NONE"
         im = im.to_color_space(cs_out)
         if ac is not None: im = torch.cat([im, ac], dim=0)
         im.save(fp_out, gf_out)

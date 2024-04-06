@@ -12,7 +12,7 @@ Tone map HDR images
     from tinycio import ColorImage
 
     im = ColorImage.load('my/hdr_image.tif', 'SRGB_LIN')
-    im.tone_map('AGX_PUNCHY').save('my/ldr_image.tif')
+    im.tone_map('AGX_PUNCHY', target_color_space='SRGB_LIN').save('my/ldr_image.tif')
 
 ----
 
@@ -39,7 +39,7 @@ If you do this manually and step-by-step instead, take note of the inputs expect
     im_ldr = ToneMapping.apply(im_ap1, tone_mapper=tm)
 
     # Take image to sRGB and apply the gamma curve
-    im_srgb = ColorSpace.convert(im_ldr, cs_in, cs_out)
+    im_srgb = ColorSpace.convert(im_ldr, cs_tm, cs_out)
 
     # Save final image as 24-bit sRGB PNG file
     fsio.save_image(im_srgb, 'my/ldr_image.png')

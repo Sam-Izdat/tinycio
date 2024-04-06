@@ -170,7 +170,7 @@ class ToneMapping:
     @classmethod
     def _aces_fitted(cls, im:torch.Tensor):
         """
-        Apply ACES (fitted version) tone mapping.
+        Apply ACES (Stephen Hill's fitted version) tone mapping.
         
         .. note::
         
@@ -183,8 +183,9 @@ class ToneMapping:
         C, H, W = im.size()
 
         # RRT and ODT
+        im = ColorSpace._ap1_rrt_sat(im)
         a = im * (im + 0.0245786) - 0.000090537
         b = im * (0.983729 * im + 0.4329510) + 0.238081
-        im  = a / b
+        im  = ColorSpace._ap1_rrt_sat_inv(a / b)
 
         return torch.clamp(im, 0., 1.) 

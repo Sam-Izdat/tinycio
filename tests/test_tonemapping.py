@@ -24,14 +24,14 @@ class TestCodec(unittest.TestCase):
         # Checks color space conversion consistency
         for tm in self.tm_list:
             im = ColorImage.load('../doc/images/test_image.png', 'SRGB')
-            im1 = im.tone_map(tm)
-            im2 = im.to_color_space('CIE_XYZ').tone_map(tm).to_color_space('SRGB')
+            im1 = im.tone_map(tm, target_color_space='SRGB_LIN').to_color_space('SRGB')
+            im2 = im.to_color_space('CIE_XYZ').tone_map(tm, target_color_space='SRGB_LIN').to_color_space('SRGB')
             compare = self.check_diff_torch(im1, im2, self.err_tol)
             self.assertTrue(compare)
-            im2 = im.to_color_space('REC2020').tone_map(tm).to_color_space('SRGB')
+            im2 = im.to_color_space('REC2020').tone_map(tm, target_color_space='SRGB_LIN').to_color_space('SRGB')
             compare = self.check_diff_torch(im1, im2, self.err_tol)
             self.assertTrue(compare)
-            im2 = im.to_color_space('LMS').tone_map(tm).to_color_space('SRGB')
+            im2 = im.to_color_space('LMS').tone_map(tm, target_color_space='SRGB_LIN').to_color_space('SRGB')
             compare = self.check_diff_torch(im1, im2, self.err_tol)
             self.assertTrue(compare)
 

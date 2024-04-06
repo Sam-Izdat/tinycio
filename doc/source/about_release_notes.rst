@@ -1,6 +1,11 @@
 Release notes
 =============
 
+.. rubric:: v 0.7.0 a - Apr. 2024
+
+* Added :code:`target_color_space` argument to :class:`.ColorImage` tone mapping. Image will be returned and, if possible, tone mapped in the desired color space.
+* Added ACEScc color space to :code:`tcio-color2color` script
+
 .. rubric:: v 0.6.3 a - Mar. 2024
 
 * Minor correction to sRGB transfer functions (insignificant for 8-bit values)

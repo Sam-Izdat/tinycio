@@ -232,6 +232,9 @@ Special thanks
 * The AgX implementation is owed to `Troy James Sobotka <https://github.com/sobotka/AgX-S2O3>`_ and `Liam Collod <https://github.com/MrLixm/AgXc>`_. 
 * Some loss computations are borrowed from `NLUT <https://github.com/semchan/NLUT/tree/main>`_. 
 * Thanks to the `@64 blog <https://64.github.io/tonemapping/>`_ for explaining common tone mapping algorithms. 
+* `Stephen Hill (@self_shadow) <https://github.com/TheRealMJP/BakingLab/blob/master/BakingLab/ACES.hlsl>`_ for ACES tone mapping fit.
+* `John Hable <http://filmicworlds.com/blog/filmic-tonemapping-operators/>`_ for the Uncharted 2 operator.
+* `Reinhard et al. <https://www.cs.utah.edu/docs/techreports/2002/pdf/UUCS-02-001.pdf>`_ for their operator. 
 * The white balancing and the von Kries transform were kindly explained by `pbr-book <https://pbr-book.org/4ed/Cameras_and_Film/Film_and_Imaging>`_.
 * The `OKLAB <https://bottosson.github.io/posts/oklab/>`_ color space was developed by `Björn Ottosson <https://bottosson.github.io/>`_
 * The `OKHSL and OKHSV <https://bottosson.github.io/posts/colorpicker/>`_ color space conversions originally by  `Brian Holbrook <https://github.com/holbrookdev>`_
