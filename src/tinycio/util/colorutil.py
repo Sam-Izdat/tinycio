@@ -29,7 +29,7 @@ def apply_gamma(im:Union[torch.Tensor, ColorImage], gamma:float) -> torch.Tensor
     """
     if gamma == 1.: return im
     assert 0.1 <= gamma <= 10.0, "gamma value should be in range [0.1, 10.0]"
-    im = torch.pow(im, gamma)
+    return torch.pow(im, gamma)
 
 def apply_hue_oklab(im_oklab:Union[torch.Tensor, ColorImage], hue_delta:float) -> torch.Tensor:
     """
@@ -58,8 +58,6 @@ def apply_hue_oklab(im_oklab:Union[torch.Tensor, ColorImage], hue_delta:float) -
 
     corrected = torch.cat([L, a_corrected, b_corrected], dim=0)
     return corrected
-
-    return im
 
 def col_hsv_to_rgb(hsv:Union[Float3, Color]) -> Float3:
     """

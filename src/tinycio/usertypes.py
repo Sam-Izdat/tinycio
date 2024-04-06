@@ -516,9 +516,9 @@ class Color(Float3):
     :param option2_param0: value of every component
     :type option2_param0: float
 
-    :param option3_param0: 3-component tensor or array 
+    :param option3_param0: 3-component tensor, array, list or tuple 
         (a 2D tensor/array image is allowed if the number of pixel values is 1)
-    :type option3_param0: torch.Tensor | numpy.ndarray | Float3
+    :type option3_param0: torch.Tensor | numpy.ndarray | Float3 | list | tuple
 
     """
     def __new__(cls, *args, **kwargs):

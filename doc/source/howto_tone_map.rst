@@ -54,42 +54,42 @@ Clamp/saturate (no tone mapping)
 --------------------------------
 
 .. image:: ../images/howto_tm/tm_clamp.png
-    :width: 700
+    :width: 512
     :alt: Clamp "tone mapping"
 
 AgX
 ---
 
 .. image:: ../images/howto_tm/tm_agx.png
-    :width: 700
+    :width: 512
     :alt: AgX tone mapping
 
 AgX Punchy
 ----------
 
 .. image:: ../images/howto_tm/tm_agx_punchy.png
-    :width: 700
+    :width: 512
     :alt: AgX Punchy tone mapping
 
 ACEScg (fitted)
 ---------------
 
 .. image:: ../images/howto_tm/tm_acescg.png
-    :width: 700
+    :width: 512
     :alt: ACEScg tone mapping
 
 Hable
 -----
 
 .. image:: ../images/howto_tm/tm_hable.png
-    :width: 700
+    :width: 512
     :alt: Hable tone mapping
 
 Reinhard (extended)
 -------------------
 
 .. image:: ../images/howto_tm/tm_reinhard.png
-    :width: 700
+    :width: 512
     :alt: Reinhard tone mapping
 
 See: :py:meth:`.ColorImage.tone_map`, :class:`.ToneMapping`

@@ -69,7 +69,7 @@ class ToneMapping:
         op, tm = tone_mapper, cls.Variant
         err_not_supported, err_disabled = f"ToneMapping {op.name} is not supported", f"ToneMapping {op.name} is disabled"
         if op & tm.DISABLED: raise Exception(err_disabled)
-
+        
         if   op == tm.NONE:         return im
         elif op == tm.CLAMP:        return im.clamp(0., 1.)
         elif op == tm.AGX:          return cls._agx(im)
@@ -78,8 +78,7 @@ class ToneMapping:
         elif op == tm.REINHARD:     return cls._reinhard_extended_luminance(im)
         elif op == tm.ACESCG:       return cls._aces_fitted(im)
         else: raise Exception(err_not_supported)
-
-        return out
+        return None
 
     @classmethod
     def _agx(cls, im:torch.Tensor):
@@ -174,18 +173,18 @@ class ToneMapping:
         
         .. note::
         
-            expects [C, H, W] input in ACESCcg color space, return ACEScg image tensor
+            expects [C, H, W] input in ACESCcg color space, returns ACEScg image tensor
 
         :param torch.Tensor im: Input image tensor.
-        :return: Tone-mapped image tensor.
+        :return: Tone mapped image tensor.
         :rtype: torch.Tensor
         """
         C, H, W = im.size()
 
         # RRT and ODT
-        im = ColorSpace._ap1_rrt_sat(im)
-        a = im * (im + 0.0245786) - 0.000090537
-        b = im * (0.983729 * im + 0.4329510) + 0.238081
-        im  = ColorSpace._ap1_odt_sat(a / b)
+        out = ColorSpace._ap1_rrt_sat(im)
+        a = out * (out + 0.0245786) - 0.000090537
+        b = out * (0.983729 * out + 0.4329510) + 0.238081
+        out  = ColorSpace._ap1_odt_sat(a / b)
 
-        return torch.clamp(im, 0., 1.) 
+        return torch.clamp(out, 0., 1.) 

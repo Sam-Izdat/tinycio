@@ -65,7 +65,7 @@ Color spaces
 .. rubric:: Footnotes
 
 .. [1] not yet implemented
-.. [2] scene-linear but still bad for rendering - can have negative values
+.. [2] scene-linear but still `bad for rendering <https://community.acescentral.com/t/difference-between-virtual-and-real-color-primaries/1380/7>`_
 .. [3] currently disabled
 .. [4] intended for color picking; not implemented for image tensor conversion
 

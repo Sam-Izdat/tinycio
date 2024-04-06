@@ -75,6 +75,7 @@ class ColorSpace:
         MODEL_YUV       = 0
         MODEL_OTHER     = LMS | HSL | HSV | OKLAB # is OKLAB CAM-based?
         
+        # Listing AP0 as negative, to avoid confusion, simply because it allows negative XYZ/LMS-equivalent values.
         NEGATIVE        = OKLAB | CIELAB | CIELUV | GAMUT_AP0
         NON_NEGATIVE    = ~NEGATIVE
 
