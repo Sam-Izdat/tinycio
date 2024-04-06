@@ -3,11 +3,11 @@ Release notes
 
 .. rubric:: v 0.7.2 a - Apr. 2024
 
- * Fixed ACES RRT/ODT
+* Fixed ACES RRT/ODT
 
 .. rubric:: v 0.7.1 a - Apr. 2024
 
- * Misc doc and script corrections
+* Misc doc and script corrections
 
 .. rubric:: v 0.7.0 a - Apr. 2024
 
