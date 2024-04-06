@@ -1,6 +1,14 @@
 Release notes
 =============
 
+.. rubric:: v 0.7.2 a - Apr. 2024
+
+ * Fixed ACES RRT/ODT
+
+.. rubric:: v 0.7.1 a - Apr. 2024
+
+ * Misc doc and script corrections
+
 .. rubric:: v 0.7.0 a - Apr. 2024
 
 * Added :code:`target_color_space` argument to :class:`.ColorImage` tone mapping. Image will be returned and, if possible, tone mapped in the desired color space.

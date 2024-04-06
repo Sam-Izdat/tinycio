@@ -107,14 +107,14 @@ class ColorSpace:
         [-0.02400335681,-0.1289689761, 1.152972333]]
 
     mat_aces_rrt_sat = [
-        [0.970889, 0.026963, 0.002148],
-        [0.010889, 0.986963, 0.002148],
-        [0.010889, 0.026963, 0.962148]]
+        [0.9708890, 0.0269633, 0.00214758],
+        [0.0108892, 0.9869630, 0.00214758],
+        [0.0108892, 0.0269633, 0.96214800]]
 
-    mat_aces_rrt_sat_inv = [
-        [ 1.03032  , -0.0280865, -0.0022375],
-        [-0.0113427,  1.01358  , -0.0022375],
-        [-0.0113427, -0.0280865,  1.03943]]
+    mat_aces_odt_sat = [
+        [0.949056, 0.0471857, 0.00375827],
+        [0.019056, 0.9771860, 0.00375827],
+        [0.019056, 0.0471857, 0.93375800]]
 
     # sRGB => XYZ => D65_2_D60 => AP1 => RRT_SAT
     mat_srgb_to_ap1_tm = [
@@ -429,8 +429,8 @@ class ColorSpace:
         return mm(im, cls.mat_aces_rrt_sat)
 
     @classmethod
-    def _ap1_rrt_sat_inv(cls, im:torch.Tensor) -> torch.Tensor:
-        return mm(im, cls.mat_aces_rrt_sat_inv)
+    def _ap1_odt_sat(cls, im:torch.Tensor) -> torch.Tensor:
+        return mm(im, cls.mat_aces_odt_sat)
 
     @classmethod
     def _xyz_to_lms(cls, xyz:torch.Tensor) -> torch.Tensor:
