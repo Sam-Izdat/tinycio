@@ -50,11 +50,6 @@ def load_image(fp:str, graphics_format:GraphicsFormat=GraphicsFormat.UNKNOWN) ->
         if out.dim() == 2: out = out.unsqueeze(-1)
         out = out.permute(2,1,0).float()/denom
         C = out.size(0)
-    if file_fmt == ImageFileFormat.EXR:
-        out = torch.from_numpy(iio.imread(fp, plugin="opencv").astype(np.float32))
-        if out.dim() == 2: out = out.unsqueeze(-1)
-        out = out.permute(2,1,0).float()/denom
-        C = out.size(0)
     else: 
         out = torch.from_numpy(iio.imread(fp).astype(np.float32))
         if out.dim() == 2: out = out.unsqueeze(-1)
