@@ -7,6 +7,47 @@ import imageio.v3 as iio
 
 from .format import GraphicsFormat, ImageFileFormat
 
+# import OpenEXR as exr
+# from pathlib import Path
+# import Imath
+# import numpy as np
+
+# def exr_to_array(filepath: Path):
+#     exrfile = exr.InputFile(filepath)
+#     print(len(exrfile.header()['channels']))
+#     exit()
+#     height = exrfile.header()['displayWindow'].max.y + 1 - exrfile.header()['displayWindow'].min.y
+#     width = exrfile.header()['displayWindow'].max.x + 1 - exrfile.header()['displayWindow'].min.x
+#     result = np.ndarray([3, height, width])
+#     for i, chan in enumerate(['R', 'G', 'B']):
+#         print(chan)
+#         raw_bytes = exrfile.channel(chan, Imath.PixelType(Imath.PixelType.FLOAT))
+#         depth_vector = np.frombuffer(raw_bytes, dtype=np.float32)
+#         depth_map = np.reshape(depth_vector, (height, width))
+#         result[i, :, :] = depth_map
+#     return result
+
+
+# def array_to_exr(arr):
+#     width = arr.shape[2]
+#     height = arr.shape[1]
+#     size = width * height
+
+#     FLOAT = Imath.PixelType(Imath.PixelType.FLOAT)
+
+#     h = exr.Header(width, height)
+#     h['channels'] = {'R' : Imath.Channel(FLOAT),
+#         'G' : Imath.Channel(FLOAT), 
+#         'B' : Imath.Channel(FLOAT)}
+#     o = exr.OutputFile('./testy.exr', h)
+#     r = arr[0, ...].astype(np.float32).tobytes('C')
+#     g = arr[1, ...].astype(np.float32).tobytes('C') 
+#     b = arr[2, ...].astype(np.float32).tobytes('C') 
+#     # a = arr[2, ...].astype(np.float32).tobytes('C') 
+#     channels = {'R' : r, 'G' : g, 'B' : b}
+#     o.writePixels(channels)
+#     o.close()
+
 def _infer_image_file_format(ext:str) -> ImageFileFormat:
     ext = ext.strip().lower()
     if   ext == '.png':     return ImageFileFormat.PNG

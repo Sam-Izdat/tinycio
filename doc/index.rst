@@ -238,4 +238,5 @@ Special thanks
 * The white balancing and the von Kries transform were kindly explained by `pbr-book <https://pbr-book.org/4ed/Cameras_and_Film/Film_and_Imaging>`_.
 * The `OKLAB <https://bottosson.github.io/posts/oklab/>`_ color space was developed by `Björn Ottosson <https://bottosson.github.io/>`_
 * The `OKHSL and OKHSV <https://bottosson.github.io/posts/colorpicker/>`_ color space conversions originally by  `Brian Holbrook <https://github.com/holbrookdev>`_
+* Matt of Ready At Dawn Studios for `explaining Logluv <https://mynameismjp.wordpress.com/2008/12/12/logluv-encoding-for-hdr/>`_.
 * `Test photograph <./_images/wb4k6k12k.jpg>`_ is from `Bianca Salgado <https://www.pexels.com/@biancasalgado/>`_

@@ -40,12 +40,6 @@ class ToneMapping:
         REINHARD            = 1<<5
         ACESCG              = 1<<6
 
-        IP_SRGB_LIN         = CLAMP | AGX | AGX_PUNCHY | HABLE | REINHARD 
-        IP_ACESCG           = ACESCG
-
-        OP_SRGB_LIN         = CLAMP | AGX | AGX_PUNCHY | HABLE | REINHARD 
-        OP_ACESCG           = ACESCG
-
         DISABLED            = 0
 
     @classmethod
