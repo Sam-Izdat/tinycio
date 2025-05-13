@@ -30,7 +30,7 @@ tcio-white-balance  = "tinycio.scripts.white_balance:main_cli"
 release = "a"
 
 [project.urls]
-Homepage = "https://sam-izdat.github.io/tinycio-docs"
+Homepage = "https://sam-izdat.github.io/tinycio"
 Issues = "https://github.com/Sam-Izdat/tinycio/issues"
 
 [build-system]

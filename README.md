@@ -1,11 +1,11 @@
 ![tinycio](https://raw.githubusercontent.com/Sam-Izdat/tinycio/main/doc/images/tinycio_sm.png)
 
-* [Project site & docs](https://sam-izdat.github.io/tinycio-docs/) 
+* [Project site & docs](https://sam-izdat.github.io/tinycio/) 
 * [PyPi](https://pypi.org/project/tinycio/)
 
 # About
 
-A primitive, lightweight Python color library for PyTorch-involved projects. It implements color space conversion, tone mapping, LUT usage and creation, basic color correction and color balancing, and HDR-LDR encoding/decoding. 
+Primitive, lightweight Python color library for PyTorch-involved projects. It implements color space conversion, tone mapping, LUT usage and creation, basic color correction and color balancing, and HDR-LDR encoding/decoding. 
 
 # Getting started
 
@@ -14,13 +14,4 @@ A primitive, lightweight Python color library for PyTorch-involved projects. It 
 * Run  `pip install tinycio`
 * Run  `tcio-setup` (installs freeimage binaries; [iio docs on fi](https://imageio.readthedocs.io/en/stable/_autosummary/imageio.plugins.freeimage.html#module-imageio.plugins.freeimage))
 
-[See the docs](https://sam-izdat.github.io/tinycio-docs/) for the rest.
-
-# Requires
-
-- Python >=3.8
-- PyTorch >=2.0 (earlier versions untested)
-- NumPy >=1.21
-- imageio >=2.9 (with PNG-FI FreeImage plugin)
-- tqdm >=4.64
-- toml >=0.10
+[See the docs](https://sam-izdat.github.io/tinycio/) for the rest.

@@ -33,7 +33,7 @@ About
     
         * v |release|
         * `PDF manual <./tinycio.pdf>`_
-        * `Previous versions <https://github.com/Sam-Izdat/tinycio-docs/releases>`_
+        * `Previous versions <https://github.com/Sam-Izdat/tinycio/releases>`_
         * :doc:`Release notes <source/about_release_notes>`
 
 As pip has a tendency to screw up PyTorch installations, torch is deliberately left out of 
@@ -207,7 +207,7 @@ Links
 
     GitHub <https://github.com/Sam-Izdat/tinycio>
     PyPi <https://pypi.org/project/tinycio/>
-    Docs <https://sam-izdat.github.io/tinycio-docs/>
+    Docs <https://sam-izdat.github.io/tinycio/>
 
 Sibling projects
 ----------------
