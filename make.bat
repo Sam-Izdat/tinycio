@@ -23,13 +23,29 @@ if errorlevel 9009 (
 	exit /b 1
 )
 
+
+if "%1" == "deep_autograde" (
+	%SPHINXBUILD% -b latex -t deepdive -D master_doc=source/deep_autograde %SOURCEDIR% %BUILDDIR%\deep_autograde
+	cd %BUILDDIR%\deep_autograde
+	make || exit /b 1
+	cd %~dp0
+
+	if not exist %BUILDDIR%\html mkdir %BUILDDIR%\html
+	if not exist %BUILDDIR%\html\articles mkdir %BUILDDIR%\html\articles
+	copy /Y %BUILDDIR%\deep_autograde\tinycio.pdf %BUILDDIR%\html\articles\deep_autograde.pdf
+
+	goto end
+)
+
 if "%1" == "" goto help
 
 %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 goto end
 
+
 :help
 %SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
+
 
 :end
 popd

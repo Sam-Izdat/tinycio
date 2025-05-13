@@ -43,4 +43,4 @@ can use them as such. Matrices are not natively supported.
 """
 # User API
 from .vector import Float2, Float3, Float4, Int2, Int3, Int4
-from .linalg import lerp, saturate, sign, normalize, reflect, matmul_tl
+from .linalg import lerp, saturate, sign, normalize, reflect, matmul, matmul_tl

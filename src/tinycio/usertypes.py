@@ -15,7 +15,7 @@ from .fsio.imagefile import _infer_image_file_format, load_image, save_image, tr
 from .fsio.format import GraphicsFormat, ImageFileFormat, LUTFormat
 from .correction import ColorCorrection
 from .util.colorutil import apply_hue_oklab, apply_gamma, col_okhsv_to_srgb, col_srgb_to_okhsv, \
-    col_okhsl_to_srgb, col_srgb_to_okhsl
+    col_okhsl_to_srgb, col_srgb_to_okhsl, xy_to_XYZ
 
 # NOTE: This module SHOULD NOT be imported by other internal modules. 
 # It is a user-facing abstraction layer. The rest of the code should be oblivious to it. 
@@ -42,7 +42,7 @@ class Chromaticity(Float2):
     def __new__(cls, *args, **kwargs):
         return super(Chromaticity, cls).__new__(cls, *args, **kwargs)
 
-    def to_xyy(self, luminance:float=0.) -> Color:
+    def to_xyy(self, luminance:float=1.) -> Color:
         """
         Returns CIE xyY color
 
@@ -51,17 +51,14 @@ class Chromaticity(Float2):
         """
         return Color(self[0], self[1], luminance)
 
-    def to_xyz(self, luminance:float=0.) -> Color:
+    def to_xyz(self, luminance:float=1.) -> Color:
         """
         Returns CIE XYZ color
 
         :param luminance: Y luminance
         :return: CIE XYZ color
         """
-
-        x = (luminance / self[1]) * self[0]
-        z = (luminance / self[1]) * (1 - self[0] - self[1])
-        return Color(x, luminance, z)
+        return Color(xy_to_XYZ(self, luminance=luminance))
 
 def wrap_pt_im_method(method):
     def wrapper(self, *args, **kwargs):

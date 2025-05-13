@@ -59,7 +59,7 @@ def normalize(v):
     :rtype: numpy.ndarray | torch.Tensor
     """
     if torch.is_tensor(v): return PTUtil.normalize(v)
-    else: return PyUtil.normalize(x)
+    else: return PyUtil.normalize(v)
 
 def reflect(n, l):
     """
@@ -75,6 +75,24 @@ def reflect(n, l):
     if torch.is_tensor(m) and torch.is_tensor(l): return PTUtil.reflect(n, l)
     else: return PyUtil.reflect(n, l)
 
+def matmul(mat:torch.Tensor, im:torch.Tensor):
+    """
+    Multiply 3x3 tensor matrix and image tensor.
+
+    :param mat: 3x3 matrix for multiplication.
+    :type mat: torch.Tensor
+    :param im: Input image tensor of shape (C, H, W).
+    :type im: torch.Tensor
+    :return: Result of the matrix multiplication, with the same shape as the input image.
+    :rtype: torch.Tensor
+    """
+    # NOTE: Internal - leaving this clutter undocumented intentionally
+    C, H, W = im.size()
+    out = im.permute(1, 2, 0).reshape(-1, 1, C)
+    mat = mat.to(im.device).unsqueeze(0).expand(out.size(0), -1, -1)
+    out = torch.bmm(out, mat.transpose(1, 2))
+    return out.permute(2, 0, 1).view(C, H, W)
+
 def matmul_tl(im:torch.Tensor, mat:list):
     """
     Multiply image tensor by a 3x3 matrix as Python list.
@@ -88,7 +106,7 @@ def matmul_tl(im:torch.Tensor, mat:list):
     """
     # NOTE: Internal - leaving this clutter undocumented intentionally
     C, H, W = im.size()
-    out = im.clone().permute(1,2,0).reshape(-1, 1, C)
+    out = im.clone().permute(1, 2, 0).reshape(-1, 1, C)
     mat = torch.tensor(mat).unsqueeze(0).repeat(out.size(0), 1, 1).to(im.device)
     out = torch.bmm(out, mat.transpose(1, 2)).permute(2,0,1).view(C, H, W)
     return out

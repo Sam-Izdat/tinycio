@@ -1,0 +1,67 @@
+name: Build and Deploy Sphinx Docs
+
+on:
+  push:
+    branches: ['main']
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build_docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          sudo apt-get update && sudo apt-get install -y latexmk texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+      
+      - name: Install Sphinx
+        run: pip install sphinx
+
+      - name: Install Sphinx deps
+        run: pip install sphinx sphinx_rtd_theme
+
+      - name: Build HTML docs
+        run: make html
+        working-directory: ${{ github.workspace }}
+
+      - name: Build PDF docs
+        run: |
+          make latexpdf
+          mv _build/latex/*.pdf _build/html/tinycio.pdf
+        working-directory: ${{ github.workspace }}
+
+      - name: Build article PDF(s)
+        run: make deep_autograde
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload HTML artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _build/html
+
+  deploy:
+    needs: build_docs
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

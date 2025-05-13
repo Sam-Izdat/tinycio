@@ -248,7 +248,7 @@ class ColorSpace:
         [ 0.0329845436,  0.9293118715,  0.0361456387],
         [ 0.0482003018,  0.2643662691,  0.6338517070]]
 
-    # OKLAB's non-linear L'M'S' to OKLAB
+    # OKLAB's LMS to OKLAB
     mat_oklab_m2 = [
         [ 0.2104542553,  0.7936177850, -0.0040720468],
         [ 1.9779984951, -2.4285922050,  0.4505937099],
@@ -1171,7 +1171,7 @@ class TransferFunction:
         :param im: S-Log encoded image tensor
         :return: linear image tensor 
         """
-        return torch.pow(10.0, ((im - 0.616596 - 0.03) / 0.432699)) - 0.037584
+        return torch.pow(10.0, (im - 0.616596 - 0.03) / 0.432699) - 0.037584
 
     @staticmethod
     def s_log_oetf(im:torch.Tensor) -> torch.Tensor:

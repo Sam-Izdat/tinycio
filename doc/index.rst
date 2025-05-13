@@ -1,9 +1,7 @@
 tinycio
 =======================================
 
-.. rubric:: color stuff for people who don't science too good
-
-A primitive, lightweight Python color library for PyTorch-involved projects. It implements color space conversion, tone mapping, LUT usage and creation, basic color correction and color balancing, and HDR-LDR encoding/decoding. 
+Primitive, lightweight Python color library for PyTorch-involved projects. It implements color space conversion, tone mapping, LUT usage and creation, basic color correction and color balancing, and HDR-LDR encoding/decoding. 
 
 .. uncomment for PDF build ("only" directive is ignored):
 
@@ -37,15 +35,6 @@ About
         * `PDF manual <./tinycio.pdf>`_
         * `Previous versions <https://github.com/Sam-Izdat/tinycio-docs/releases>`_
         * :doc:`Release notes <source/about_release_notes>`
-
-.. rubric:: Requires
-
-- Python >=3.8
-- PyTorch >=2.0 (earlier versions untested)
-- NumPy >=1.21
-- imageio >=2.9 (with PNG-FI FreeImage plugin)
-- tqdm >=4.64
-- toml >=0.10
 
 As pip has a tendency to screw up PyTorch installations, torch is deliberately left out of 
 the explicit package requirements; install it whichever way is most appropriate, if you 
@@ -92,7 +81,7 @@ project like `Colour <https://www.colour-science.org/>`_.
 * OKHSL
 * OKHSV
 
-.. rubric:: Supported tone mappers:
+.. rubric:: Supported tone mapping operators:
 
 * AgX / AgX punchy
 * ACEScg (fitted RRT+ODT)
@@ -129,7 +118,6 @@ How to
     source/howto_ccbasic
     source/howto_apply_lut
     source/howto_bake_lut
-    source/howto_autograde
 
 Examples
 --------
@@ -145,6 +133,23 @@ Examples
 
     source/example_sweeps
     source/example_image_manip
+
+
+Deeper dive
+------------
+
+.. only:: html
+
+    See: :doc:`deeper dives section <source/deep_autograde>`.
+
+.. only:: not latex
+
+    .. toctree::
+        :maxdepth: 4
+        :caption: Deeper dive:
+        :hidden:
+
+        source/deep_autograde
 
 
 Reference
@@ -204,24 +209,19 @@ Links
     PyPi <https://pypi.org/project/tinycio/>
     Docs <https://sam-izdat.github.io/tinycio-docs/>
 
-.. Sibling projects
-.. ----------------
+Sibling projects
+----------------
 
-.. * `tinylcm <https://sam-izdat.github.io/tinylcm-docs/>`_
-.. * `tinypbr <https://sam-izdat.github.io/tinypbr-docs/>`_
-.. * `tinytex <https://sam-izdat.github.io/tinytex-docs/>`_
+* `tinytex <https://sam-izdat.github.io/tinytex/>`_
+* `tinyfilm <https://sam-izdat.github.io/tinyfilm/>`_
 
-.. .. toctree::
-..     :maxdepth: 2
-..     :caption: Sibling projects:
-..     :hidden:
+.. toctree::
+    :maxdepth: 2
+    :caption: Sibling projects:
+    :hidden:
 
-.. tinytex <https://sam-izdat.github.io/tinytex-docs/>
-.. tinypbr <https://sam-izdat.github.io/tinypbr-docs/>
-.. tinylcm <https://sam-izdat.github.io/tinylcm-docs/>
-.. tinysimi <https://sam-izdat.github.io/tinysimi-docs/>
-.. tinytrace <https://sam-izdat.github.io/tinytrace-docs/>
-.. tinyraster <https://sam-izdat.github.io/tinyraster-docs/>
+    tinytex <https://sam-izdat.github.io/tinytex/>
+    tinyfilm <https://sam-izdat.github.io/tinyfilm/>
 
 Special thanks
 --------------

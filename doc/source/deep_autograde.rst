@@ -1,6 +1,17 @@
-Color grade by example
-======================
+Differentiable color grading
+============================
 
+.. only:: html
+    
+    `PDF version <../articles/deep_autograde.pdf>`_
+
+    ----
+
+.. raw:: latex
+
+   \section*{Differentiable color grading}
+   \addcontentsline{toc}{section}{Differentiable color grading}
+   
 .. figure:: ../images/howto_autograde/autograde_example.jpg
     :width: 700
     :alt: Automatic by-example color correction
@@ -192,6 +203,12 @@ The obvious disadvantage of doing this with no ANN, however, is that the optimiz
 unaware of the scene; we are treating images as mere buckets of color. As there's no image segmentation 
 involved, this technique is probably best suited for, in some sense, "proposing a color palette" rather 
 than trying to meaningfully match scene features.
+
+What's worse is that (directly) fitted LUTs will likely not generalize well at all, making them essentially 
+one-time use. The response curves produced by a fitted LUT are not guaranteed to be monotonic, or even to make any 
+sense at all once removed from the specific colors optimized and applied to a different image. For example, 
+adding more to the red channel may produce much less red - not for some nuanced reason actually modeling something, 
+but just because. The optimizer was perhaps not made aware those colors even exist.
 
 A few problem cases are illustrated below.
 

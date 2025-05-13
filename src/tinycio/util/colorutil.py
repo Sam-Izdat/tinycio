@@ -18,6 +18,18 @@ def srgb_luminance(im_srgb:Union[torch.Tensor, ColorImage]) -> torch.Tensor:
     lum_r, lum_g, lum_b = 0.2126, 0.7152, 0.0722
     return lum_r * im_srgb[0:1,...] + lum_g * im_srgb[1:2,...] + lum_b * im_srgb[2:3,...]
 
+def srgb_saturation(im:Union[torch.Tensor, ColorImage], sat):
+    """
+    Apply saturation adjustment to image in sRGB gamut
+
+    :param im_srgb: [C=3, H, W] color image tensor in sRGB color space
+    :type im_srgb: torch.Tensor | ColorImage
+    :return: [C=1, H, W] image tensor
+    :return: Saturation-corrected image tensor
+    """
+    lum = srgb_luminance(im).repeat(3,1,1) 
+    return lum + sat * (im - lum)
+
 def apply_gamma(im:Union[torch.Tensor, ColorImage], gamma:float) -> torch.Tensor:
     """
     Apply arbitrary gamma correction.
@@ -25,15 +37,110 @@ def apply_gamma(im:Union[torch.Tensor, ColorImage], gamma:float) -> torch.Tensor
     :param im: Image tensor
     :type im: torch.Tensor | ColorImage
     :param gamma: Gamma correction (should be in the range [0.1, 10.0])
-    :return: Gamma-corrected image tensor
+    :return: Image tensor with correction applied
     """
     if gamma == 1.: return im
     assert 0.1 <= gamma <= 10.0, "gamma value should be in range [0.1, 10.0]"
     return torch.pow(im, gamma)
 
+def asc_cdl(im:Union[torch.Tensor, ColorImage], slope:float = 1.0, offset:float = 0.0, power:float = 1.0, eps:float=1e-7):
+    """
+    Apply ASC DCL
+
+    :param im: Image tensor
+    :type im: torch.Tensor | ColorImage
+    :param slope: slope
+    :param offset: offset
+    :param power: power
+    :param eps: epsilon
+    :return: Image tensor with correction applied
+    """
+    return torch.pow(torch.clamp(im * slope + offset, min=eps), power)
+
+def lgg(im:Union[torch.Tensor, ColorImage], lift:float = 1.0, gamma = 1.0, gain:float = 1.0, eps:float=1e-7):
+    """
+    Apply Lift/Gamma/Gain
+
+    :param im: Image tensor
+    :type im: torch.Tensor | ColorImage
+    :param lift: slope
+    :param gamma: offset
+    :param gain: power
+    :param eps: epsilon
+    :return: Image tensor with correction applied
+    """
+    im = im * (1.5 - 0.5 * lift) + 0.5 * lift - 0.5
+    im = im * gain
+    im = torch.pow(torch.clamp(im, min=eps), 1.0 / max(gamma, eps))
+    return im
+
+def xy_to_XYZ(xy:Union[tuple, Float2, Chromaticity], luminance:float = 1.0) -> tuple:
+    """
+    Convert xy chromaticity to CIE XYZ. (CIE 1931 2°)
+
+    :param xy: xy chromaticity
+    :type xy: tuple | Float2 | Chromaticity
+    :param luminance: Y luminance
+    :return: CIE XYZ color
+    """    
+    # x, y = xy
+    # X = (x * Y) / y
+    # Z = ((1 - x - y) * Y) / y
+    x = (luminance / xy[1]) * xy[0]
+    z = (luminance / xy[1]) * (1.0 - xy[0] - xy[1])
+    return Float3(x, luminance, z)
+
+def xyz_mat_from_primaries(rgb:list, wp:Union[tuple, Float2, Chromaticity]):
+    """
+    Get XYZ transform for arbitrary RGB primaries. (CIE 1931 2°)
+
+    :param rgb: List of RGB chromaticities
+    :type rgb: list[tuple | Float2 | Chromaticity]
+    :param wp: white point chromaticity
+    :type wp: tuple | Float2 | Chromaticity
+    :return: 3×3 RGB to XYZ matrix
+    :rtype: numpy.ndarray
+    """
+    # Convert xy to XYZ for RGB
+    Xr = xy_to_XYZ(rgb[0])
+    Xg = xy_to_XYZ(rgb[1])
+    Xb = xy_to_XYZ(rgb[2])
+    M = np.stack([Xr, Xg, Xb], axis=1)
+
+    # Compute scaling factors so that whitepoint maps correctly
+    white_XYZ = xy_to_XYZ(wp)
+    S = np.linalg.inv(M) @ white_XYZ
+    M_scaled = M * S
+    return M_scaled
+
+def mat_von_kries_cat(
+    src_wp_xy:Union[tuple, Float2, Chromaticity], 
+    dst_wp_xy:Union[tuple, Float2, Chromaticity], 
+    cs_to_lms:numpy.ndarray, 
+    lms_to_cs:numpy.ndarray):
+    """
+    Compute simple raw LMS Von Kries CAT matrix.
+
+    :param src_wp_xy: Source white point
+    :type src_wp_xy: list[tuple | Float2 | Chromaticity]
+    :param dst_wp_xy: Destination/target white point
+    :type dst_wp_xy: list[tuple | Float2 | Chromaticity]
+    :param cs_to_lms: 3×3 to-LMS matrix
+    :type cs_to_lms: numpy.ndarray
+    :param lms_to_cs: 3×3 from-LMS matrix
+    :type lms_to_cs: numpy.ndarray
+
+    :return: 3×3 chromatic adaptation transform matrix
+    :rtype: numpy.ndarray
+    """
+    src_LMS = cs_to_lms @ xy_to_XYZ(src_wp_xy)
+    dst_LMS = cs_to_lms @ xy_to_XYZ(dst_wp_xy)
+    D = np.diag(dst_LMS / src_LMS)
+    return lms_to_cs @ D @ cs_to_lms
+
 def apply_hue_oklab(im_oklab:Union[torch.Tensor, ColorImage], hue_delta:float) -> torch.Tensor:
     """
-    Manually shift hue of an image by a -1 to +1 delta value.
+    Manually shift hue by a -1 to +1 delta value.
 
     :param im_oklab: Image tensor in OKLAB color space
     :type im_oklab: torch.Tensor | ColorImage

@@ -1,6 +1,12 @@
 Release notes
 =============
 
+.. rubric:: v 0.8.0 a - May 2025
+
+* Reworked util module
+* Reworked docs
+* Some other minor changes and fixes
+
 .. rubric:: v 0.7.2 a - Apr. 2024
 
 * Fixed ACES RRT/ODT

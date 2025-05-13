@@ -92,7 +92,7 @@ class ColorCorrection:
         allow_hue_shift:bool=False,
         fit_height:int=512,
         fit_width:int=512,
-        device:str='cuda',
+        device:str=None,
         context:callable=None
         )  -> ColorCorrection:
         """
@@ -119,7 +119,8 @@ class ColorCorrection:
         """
         assert 0. <= strength <= 1., "strength must be in range [0, 1]"
         im_source = im_source.clone()
-        device = torch.device(device.strip().lower()) if device is not None else im_source.device
+        device = torch.device(device.strip().lower()) if device is not None else torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        im_source = im_source.to(device)
         im_source = F.interpolate(
             im_source.unsqueeze(0), 
             size=[fit_height, fit_width], 

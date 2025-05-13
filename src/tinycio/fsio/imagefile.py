@@ -7,6 +7,8 @@ import imageio.v3 as iio
 
 from .format import GraphicsFormat, ImageFileFormat
 
+# FIXME: TODO: Fix EXR on linux
+
 # import OpenEXR as exr
 # from pathlib import Path
 # import Imath

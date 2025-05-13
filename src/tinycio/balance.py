@@ -237,33 +237,32 @@ class WhiteBalance:
         mean_color[0] /= csum
         mean_color[1] /= csum
         return Float2(mean_color[0].item(), mean_color[1].item())
-
+        
     @staticmethod
     def apply(
-        im_lms:Union[torch.Tensor, ColorImage], 
-        source_white:Union[Float2, Chromaticity, torch.Tensor, numpy.ndarray], 
-        target_white:Union[Float2, Chromaticity, torch.Tensor, numpy.ndarray]) -> torch.Tensor:
+        im_lms: torch.Tensor, 
+        source_white: torch.Tensor, 
+        target_white: torch.Tensor
+    ) -> torch.Tensor:
         """
         Apply white balance.
 
         :param im_lms: Image tensor in LMS color space
-        :type im_lms: torch.Tensor | ColorImage
-        :param source_white: Source white point coordinates (CIE xy)
-        :type source_white: Float2 | Chromaticity | torch.Tensor | numpy.ndarray
-        :param target_white: Target white point coordinates (CIE xy)
-        :type target_white: Float2 | Chromaticity | torch.Tensor | numpy.ndarray
+        :type im_lms: torch.Tensor
+        :param source_white: Source white point in LMS space
+        :type source_white: torch.Tensor
+        :param target_white: Target white point in LMS space
+        :type target_white: torch.Tensor
         :return: White balanced image tensor
+        :rtype: torch.Tensor
         """
         source = torch.tensor([[[source_white[0], source_white[0], 1.]]], dtype=torch.float32).permute(2, 0, 1)
         target = torch.tensor([[[target_white[0], target_white[0], 1.]]], dtype=torch.float32).permute(2, 0, 1)
-
         src_lms = ColorSpace.convert(source, ColorSpace.Variant.CIE_XYY, ColorSpace.Variant.LMS)
         dst_lms = ColorSpace.convert(target, ColorSpace.Variant.CIE_XYY, ColorSpace.Variant.LMS)
 
-        mat = [
-            [dst_lms[0].item()/src_lms[0].item(), 0., 0.],
-            [0., dst_lms[1].item()/src_lms[1].item(), 0.],
-            [0., 0., dst_lms[2].item()/src_lms[2].item()]]
-
+        scale = dst_lms / torch.clamp(src_lms, min=1e-6)
+        mat = torch.diag(scale)  
         corrected = mm(im_lms, mat)
+        # corrected = im_lms * scale # NOTE: element-wise without the diagonal matrix also works fine for simplified Von Kries - but let's be thorough
         return corrected

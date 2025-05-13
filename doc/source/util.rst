@@ -11,6 +11,18 @@ util module
 
     .. autosummary::
 
+        version
+        version_check_minor
+        remap
+        remap_to_01
+        remap_from_01
+        smoothstep
+        softsign
+        fract
+        serialize_tensor
+        trilinear_interpolation
+        fitted_polynomial_curve_6th_order
+        fitted_polynomial_curve_7th_order
         progress_bar
         apply_gamma
         apply_hue_oklab
@@ -23,6 +35,37 @@ util module
         col_srgb_to_okhsv
         col_okhsl_to_srgb
         col_srgb_to_okhsl
+        asc_cdl
+        lgg
+        xy_to_XYZ
+        xyz_mat_from_primaries
+        mat_von_kries_cat
+
+    .. autofunction:: version
+
+    .. autofunction:: version_check_minor
+
+    .. autofunction:: remap
+
+    .. autofunction:: remap_to_01
+
+    .. autofunction:: remap_from_01
+
+    .. autofunction:: smoothstep
+
+    .. autofunction:: softsign
+
+    .. autofunction:: fract
+
+    .. autofunction:: serialize_tensor
+
+    .. autofunction:: trilinear_interpolation
+
+    
+    .. autofunction:: fitted_polynomial_curve_6th_order
+    
+    .. autofunction:: fitted_polynomial_curve_7th_order
+
 
     .. autofunction:: progress_bar
 
@@ -47,3 +90,13 @@ util module
     .. autofunction:: col_okhsl_to_srgb
     
     .. autofunction:: col_srgb_to_okhsl
+    
+    .. autofunction:: asc_cdl
+    
+    .. autofunction:: lgg
+    
+    .. autofunction:: xy_to_XYZ
+    
+    .. autofunction:: xyz_mat_from_primaries
+
+    .. autofunction:: mat_von_kries_cat

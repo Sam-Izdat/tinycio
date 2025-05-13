@@ -316,7 +316,7 @@ def applyAgxLut(array):
     return extrapolate(array)
 
 
-def applyLookPunchy(array, punchy_gamma=1.3, punchy_saturation=1.2):
+def applyLookPunchy(array, punchy_gamma=1.35, punchy_saturation=1.4): # NOTE: params modified to match Sobotka's
     # type: (numpy.ndarray, float, float) -> numpy.ndarray
     """
     Initally an OCIO CDLTransform.
