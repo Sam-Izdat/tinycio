@@ -262,7 +262,8 @@ class WhiteBalance:
         dst_lms = ColorSpace.convert(target, ColorSpace.Variant.CIE_XYY, ColorSpace.Variant.LMS)
 
         scale = dst_lms / torch.clamp(src_lms, min=1e-6)
-        mat = torch.diag(scale)  
+        mat = torch.diag(scale.squeeze())  
+        print(mat)
         corrected = mm(im_lms, mat)
         # corrected = im_lms * scale # NOTE: element-wise without the diagonal matrix also works fine for simplified Von Kries - but let's be thorough
         return corrected
