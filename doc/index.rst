@@ -150,6 +150,7 @@ Deeper dive
         :hidden:
 
         source/deep_autograde
+        source/deep_analyzer
 
 
 Reference

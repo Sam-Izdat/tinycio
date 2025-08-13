@@ -1,0 +1,644 @@
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.167.1/build/three.module.min.js",
+    "three/addons/": "https://unpkg.com/three@0.167.1/examples/jsm/"
+  }
+}
+</script>
+<label for="fileInput" style="cursor:pointer;display:inline-block;padding:6px 12px;background:#444;color:white;border-radius:4px;">
+  Browse
+</label>
+<div>
+  <input id="fileInput" type="file" accept="image/*" style="display:none">
+</div>
+<div>
+  <span>Reference Frame:</span>
+  <select id="reference-frame"></select>
+  <span>Working Space:</span>
+  <select id="working-space"></select>
+  <button id="toggleHull">Toggle Hull</button>
+  <button id="toggleLocus">Toggle Locus</button>
+</div>
+<div id="color_analyzer" class="color_analyzer">
+</div>
+
+<style>
+  .color_analyzer {
+    font-family: system-ui;
+    background: #000000;
+    color: white;
+    text-align: center;
+  }
+  #color_analyzer {
+    height: 700px;
+    width: 100%;
+  }
+</style>
+<script type="module">
+  // import * as THREE from 'https://unpkg.com/three@0.167.1/build/three.module.min.js';
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  import { ConvexGeometry } from 'three/addons/geometries/ConvexGeometry.js';
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x111111);
+
+  const container = document.getElementById('color_analyzer');
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+
+  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+  camera.position.set(2, 2, 3);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(width, height);
+  container.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+
+  const animate = () => {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  };
+
+  const enumReferenceFrame = {
+    LOCAL:    0,  
+    CIE_xyY:  1,
+    CIE_XYZ:  2,
+    LMS:      3,
+  };
+
+  const enumColorSpace = {
+    sRGB:     0,
+    CIE_xyY:  1,
+    CIE_XYZ:  2,
+    LMS:      3,
+  };
+
+  const matIdentity = new THREE.Matrix3().set(
+    1.0, 0.0, 1.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0
+  );
+
+  const matsRGBToXYZ = new THREE.Matrix3().set(
+    0.412390799265959481, 0.357584339383877964, 0.180480788401834288,
+    0.212639005871510358, 0.715168678767755927, 0.072192315360733715,
+    0.0193308187155918507, 0.119194779794625988, 0.950532152249660581
+  );
+
+  const matXYZTosRGB = new THREE.Matrix3().set(
+    3.24096994190452134, -1.53738317757009346, -0.498610760293003284,
+    -0.969243636280879826, 1.87596750150772067, 0.0415550574071756125,
+    0.0556300796969936084, -0.203976958888976564, 1.05697151424287856
+  );
+
+  const matLMSToXYZ = new THREE.Matrix3().set(
+     0.986993,   -0.147054,  0.159963,
+     0.432305,    0.51836,   0.0492912,
+    -0.00852866,  0.0400428, 0.968487
+  );
+
+  const matXYZToLMS = new THREE.Matrix3().set(
+     0.8951, 0.2664,-0.1614,
+    -0.7502, 1.7135, 0.0367,
+     0.0389,-0.0685, 1.0296
+  );
+
+
+  let lastImage   = null;
+  let matToXYZ    = matIdentity;
+  let matFromXYZ  = matIdentity;
+
+  let referenceFrame = enumReferenceFrame.LOCAL;
+  let workingSpace = enumColorSpace.sRGB;
+  let plotSpace = workingSpace; // Updated on change
+  const imageSpace = enumColorSpace.sRGB;
+  const displaySpace = enumColorSpace.sRGB;
+
+  // ### AXES
+  scene.add(new THREE.AxesHelper(1.5));
+
+
+  let currentPoints = null;
+
+  let locusEnabled = false;
+  let locusMesh = null;
+  let locusPoints = null;
+
+  let hullEnabled = true;
+  let hullPoints = null;
+  let hullPositions = null;
+
+  const cmfXYZ = [
+  { X: 0.0014, Y: 0.0000, Z: 0.0065 },
+  { X: 0.0022, Y: 0.0001, Z: 0.0105 },
+  { X: 0.0042, Y: 0.0001, Z: 0.0201 },
+  { X: 0.0076, Y: 0.0002, Z: 0.0362 },
+  { X: 0.0143, Y: 0.0004, Z: 0.0679 },
+  { X: 0.0232, Y: 0.0006, Z: 0.1102 },
+  { X: 0.0435, Y: 0.0012, Z: 0.2074 },
+  { X: 0.0776, Y: 0.0022, Z: 0.3713 },
+  { X: 0.1344, Y: 0.0040, Z: 0.6456 },
+  { X: 0.2148, Y: 0.0073, Z: 1.0391 },
+  { X: 0.2839, Y: 0.0116, Z: 1.3856 },
+  { X: 0.3285, Y: 0.0168, Z: 1.6230 },
+  { X: 0.3483, Y: 0.0230, Z: 1.7471 },
+  { X: 0.3481, Y: 0.0298, Z: 1.7826 },
+  { X: 0.3362, Y: 0.0380, Z: 1.7721 },
+  { X: 0.3187, Y: 0.0480, Z: 1.7441 },
+  { X: 0.2908, Y: 0.0600, Z: 1.6692 },
+  { X: 0.2511, Y: 0.0739, Z: 1.5281 },
+  { X: 0.1954, Y: 0.0910, Z: 1.2876 },
+  { X: 0.1421, Y: 0.1126, Z: 1.0419 },
+  { X: 0.0956, Y: 0.1390, Z: 0.8130 },
+  { X: 0.0580, Y: 0.1693, Z: 0.6162 },
+  { X: 0.0320, Y: 0.2080, Z: 0.4652 },
+  { X: 0.0147, Y: 0.2586, Z: 0.3533 },
+  { X: 0.0049, Y: 0.3230, Z: 0.2720 },
+  { X: 0.0024, Y: 0.4073, Z: 0.2123 },
+  { X: 0.0093, Y: 0.5030, Z: 0.1582 },
+  { X: 0.0291, Y: 0.6082, Z: 0.1117 },
+  { X: 0.0633, Y: 0.7100, Z: 0.0782 },
+  { X: 0.1096, Y: 0.7932, Z: 0.0573 },
+  { X: 0.1655, Y: 0.8620, Z: 0.0422 },
+  { X: 0.2257, Y: 0.9149, Z: 0.0298 },
+  { X: 0.2904, Y: 0.9540, Z: 0.0203 },
+  { X: 0.3597, Y: 0.9803, Z: 0.0134 },
+  { X: 0.4334, Y: 0.9950, Z: 0.0087 },
+  { X: 0.5121, Y: 1.0000, Z: 0.0057 },
+  { X: 0.5945, Y: 0.9950, Z: 0.0039 },
+  { X: 0.6784, Y: 0.9786, Z: 0.0027 },
+  { X: 0.7621, Y: 0.9520, Z: 0.0021 },
+  { X: 0.8425, Y: 0.9154, Z: 0.0018 },
+  { X: 0.9163, Y: 0.8700, Z: 0.0017 },
+  { X: 0.9786, Y: 0.8163, Z: 0.0014 },
+  { X: 1.0263, Y: 0.7570, Z: 0.0011 },
+  { X: 1.0567, Y: 0.6949, Z: 0.0010 },
+  { X: 1.0622, Y: 0.6310, Z: 0.0008 },
+  { X: 1.0456, Y: 0.5668, Z: 0.0006 },
+  { X: 1.0026, Y: 0.5030, Z: 0.0003 },
+  { X: 0.9384, Y: 0.4412, Z: 0.0002 },
+  { X: 0.8544, Y: 0.3810, Z: 0.0002 },
+  { X: 0.7514, Y: 0.3210, Z: 0.0001 },
+  { X: 0.6424, Y: 0.2650, Z: 0.0000 },
+  { X: 0.5419, Y: 0.2170, Z: 0.0000 },
+  { X: 0.4479, Y: 0.1750, Z: 0.0000 },
+  { X: 0.3608, Y: 0.1382, Z: 0.0000 },
+  { X: 0.2835, Y: 0.1070, Z: 0.0000 },
+  { X: 0.2187, Y: 0.0816, Z: 0.0000 },
+  { X: 0.1649, Y: 0.0610, Z: 0.0000 },
+  { X: 0.1212, Y: 0.0446, Z: 0.0000 },
+  { X: 0.0874, Y: 0.0320, Z: 0.0000 },
+  { X: 0.0636, Y: 0.0232, Z: 0.0000 },
+  { X: 0.0468, Y: 0.0170, Z: 0.0000 },
+  { X: 0.0329, Y: 0.0119, Z: 0.0000 },
+  { X: 0.0227, Y: 0.0082, Z: 0.0000 },
+  { X: 0.0158, Y: 0.0057, Z: 0.0000 },
+  { X: 0.0114, Y: 0.0041, Z: 0.0000 },
+  { X: 0.0081, Y: 0.0029, Z: 0.0000 },
+  { X: 0.0058, Y: 0.0021, Z: 0.0000 },
+  { X: 0.0041, Y: 0.0015, Z: 0.0000 },
+  { X: 0.0029, Y: 0.0010, Z: 0.0000 },
+  { X: 0.0020, Y: 0.0007, Z: 0.0000 },
+  { X: 0.0014, Y: 0.0005, Z: 0.0000 },
+  { X: 0.0010, Y: 0.0004, Z: 0.0000 },
+  { X: 0.0007, Y: 0.0002, Z: 0.0000 },
+  { X: 0.0005, Y: 0.0002, Z: 0.0000 },
+  { X: 0.0003, Y: 0.0001, Z: 0.0000 },
+  { X: 0.0002, Y: 0.0001, Z: 0.0000 },
+  { X: 0.0002, Y: 0.0001, Z: 0.0000 },
+  { X: 0.0001, Y: 0.0000, Z: 0.0000 },
+  { X: 0.0001, Y: 0.0000, Z: 0.0000 },
+  { X: 0.0001, Y: 0.0000, Z: 0.0000 },
+  { X: 0.0000, Y: 0.0000, Z: 0.0000 }
+  ];
+
+
+  const showLocus = () => {
+    if (plotSpace == enumColorSpace.CIE_XYZ) { 
+      const xyzPoints = cmfXYZ.map(p => new THREE.Vector3(p.X, p.Y, p.Z));
+
+      // Create convex hull mesh
+      const xyzHullGeometry = new ConvexGeometry(xyzPoints);
+      const xyzHullMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true,  
+        transparent: true,
+        opacity: 0.008,
+        side: THREE.DoubleSide
+      });
+      locusMesh = new THREE.Mesh(xyzHullGeometry, xyzHullMaterial);
+
+      const vertPositions = [];
+      const vertColors = [];
+
+      xyzPoints.forEach(v => {
+        vertPositions.push(v.x, v.y, v.z);
+
+        const r = Math.min(Math.max(v.x, 0), 1);
+        const g = Math.min(Math.max(v.y, 0), 1);
+        const b = Math.min(Math.max(v.z, 0), 1);
+        vertColors.push(r, g, b);
+      });
+
+      const vertGeometry = new THREE.BufferGeometry();
+      vertGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertPositions, 3));
+      vertGeometry.setAttribute('color', new THREE.Float32BufferAttribute(vertColors, 3));
+
+
+      const vertMaterial = new THREE.PointsMaterial({
+        size: 0.08,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8
+      });
+
+      locusPoints = new THREE.Points(vertGeometry, vertMaterial);
+      scene.add(locusPoints);
+      scene.add(locusMesh);
+    }
+  }
+
+  const plotImageColors = (img) => {
+    lastImage = img;
+    // Remove old points
+    if (currentPoints) {
+      scene.remove(currentPoints);
+      currentPoints.geometry.dispose();
+      currentPoints.material.dispose();
+      currentPoints = null;
+    }
+
+    // Draw to canvas to read pixels
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, img.width, img.height).data;
+
+    const positions = new Float32Array(img.width * img.height * 3);
+
+    for (let i=0,j=0; i<imgData.length; i+=4, j+=3) {
+      positions[j]   = imgData[i]/255;
+      positions[j+1] = imgData[i+1]/255;
+      positions[j+2] = imgData[i+2]/255;
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('colInput', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)); // for bounds & culling
+    geometry.computeBoundingSphere();
+
+    // geometry.setAttribute('colInput', new THREE.BufferAttribute(colors, 3));
+
+    const material = new THREE.ShaderMaterial({
+      vertexShader: `
+        // attribute vec3 posInput;
+        attribute vec3 colInput;
+        uniform mat3 matToXYZ;    // sRGB input col to CIE XYZ
+        uniform mat3 matFromXYZ;  // CIE XYZ to target working space
+        uniform int workingSpace; 
+        uniform int plotSpace; 
+        uniform float opacity;
+        uniform float pointSize;
+        varying vec4 vColor;
+
+        // Color space enumeration
+        const int CS_sRGB     = 0;
+        const int CS_CIE_xyY  = 1;
+        const int CS_CIE_XYZ  = 2;
+        const int CS_LMS      = 3;
+
+        vec3 sRGB_OETF(vec3 c) {
+          return vec3(
+            (c.r <= 0.0031308) ? c.r * 12.92 : 1.055 * pow(c.r, 1.0 / 2.4) - 0.055,
+            (c.g <= 0.0031308) ? c.g * 12.92 : 1.055 * pow(c.g, 1.0 / 2.4) - 0.055,
+            (c.b <= 0.0031308) ? c.b * 12.92 : 1.055 * pow(c.b, 1.0 / 2.4) - 0.055
+          );
+        }
+
+        vec3 sRGB_inv_OETF(vec3 c) {
+          return vec3(
+            (c.r <= 0.04045) ? c.r / 12.92 : pow((c.r + 0.055) / 1.055, 2.4),
+            (c.g <= 0.04045) ? c.g / 12.92 : pow((c.g + 0.055) / 1.055, 2.4),
+            (c.b <= 0.04045) ? c.b / 12.92 : pow((c.b + 0.055) / 1.055, 2.4)
+          );
+        }
+
+        vec3 conv_space_to_XYZ(vec3 col, int space, mat3 conv_mat) {
+          vec3 res = col;
+          switch(space) {
+            case CS_sRGB:
+              col = sRGB_inv_OETF(col);
+              col = conv_mat * col;
+              res = col;
+              break;
+            case CS_CIE_xyY:
+              float eps = 1e-7;
+              float x = col.x;
+              float y = (col.y <= 0.0) ? eps : col.y;
+              float Y = col.z;
+              res = vec3((Y / y) * x, Y, (Y / y) * (1.0 - x - y));
+              break;
+            case CS_LMS: 
+              col = conv_mat * col;
+              res = col;
+              break;
+            case CS_CIE_XYZ:
+            default:
+              break;
+          }
+          return res;
+        }
+
+        vec3 conv_XYZ_to_space(vec3 col, int space, mat3 conv_mat) {
+          vec3 res = col;
+          switch(space) {
+            case CS_sRGB:
+              col = conv_mat * col;
+              col = sRGB_OETF(col);
+              res = clamp(col, 0.0, 1.0);
+              break;
+            case CS_CIE_xyY:
+              float X = col.x;
+              float Y = col.y;
+              float Z = col.z;
+              float denom = X + Y + Z;
+              res = vec3(X / denom, Y / denom, Y);
+              break;
+            case CS_LMS:
+              col = conv_mat * col;
+              res = col;
+              break;
+            case CS_CIE_XYZ: 
+            default:
+              break;
+          }
+          return res;
+        }
+
+        vec3 conv_sRGB_to_space(vec3 col, int space, mat3 matToXYZ, mat3 matFromXYZ) {
+          if (space == CS_sRGB) { return col; }
+          vec3 res = col;
+          res = conv_space_to_XYZ(res, CS_sRGB, matToXYZ);
+          res = conv_XYZ_to_space(res, space, matFromXYZ);
+          return res;
+        }
+
+        void main() {
+          // vec3 pos = matPosConv * colInput; // transform
+          // vec3 pos = colInput.rgb;
+          vec3 pos = conv_XYZ_to_space(conv_space_to_XYZ(colInput.rgb, workingSpace, matToXYZ), plotSpace, matFromXYZ);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos.xyz, 1.0);
+          gl_PointSize = pointSize; 
+          vColor = vec4(colInput.xyz, opacity); // could also convert to display space here
+        }
+      `,
+      fragmentShader: `
+        varying vec4 vColor;
+        void main() {
+          gl_FragColor = vColor; // maybe apply gamma here
+        }
+      `,
+      transparent: true,
+      vertexColors: true,
+      uniforms: {
+        matToXYZ:   { value: matToXYZ },
+        matFromXYZ: { value: matFromXYZ },
+        workingSpace: { value: workingSpace },
+        plotSpace: { value: plotSpace },
+        opacity: { value: 0.1 },
+        pointSize: { value: 0.1 }
+      }
+    });
+
+    // material.uniforms.uniforms.value = 0.1;
+
+    currentPoints = new THREE.Points(geometry, material);
+    scene.add(currentPoints);
+
+    if (hullEnabled) { 
+      if (hullPoints) scene.remove(hullPoints);
+
+      const geometry_hull = new THREE.BufferGeometry();
+      geometry_hull.setAttribute('colInput', new THREE.BufferAttribute(hullPositions, 3));
+      geometry_hull.setAttribute('position', new THREE.BufferAttribute(hullPositions, 3));
+      geometry_hull.computeBoundingSphere();
+
+      // clone original material but tweak uniforms
+      const hullMaterial = material.clone();
+      hullMaterial.uniforms = THREE.UniformsUtils.clone(material.uniforms);
+      hullMaterial.uniforms.opacity.value = 0.5;     // more opaque
+      hullMaterial.uniforms.pointSize.value = 1.5;   // much larger points
+
+      hullPoints = new THREE.Points(geometry_hull, hullMaterial);
+      scene.add(hullPoints);  
+    }
+
+    if (locusEnabled) showLocus();
+  }
+   
+  const generateHullPositions = (res = 40) => {
+    const pts = [];
+    const min = 0, max = 1; // normalized cube
+    const step = (max - min) / (res - 1);
+
+    for (let i = 0; i < res; i++) {
+      for (let j = 0; j < res; j++) {
+        for (let k = 0; k < res; k++) {
+          const x = min + i * step;
+          const y = min + j * step;
+          const z = min + k * step;
+
+          // Count how many coordinates are on the min/max boundary
+          let boundaries = 0;
+          if (i === 0 || i === res - 1) boundaries++;
+          if (j === 0 || j === res - 1) boundaries++;
+          if (k === 0 || k === res - 1) boundaries++;
+
+          // Keep only edges (two boundaries exactly)
+          if (boundaries === 2) {
+            pts.push(x, y, z);
+          }
+        }
+      }
+    }
+    return new Float32Array(pts);
+  }
+
+
+  // INIT
+
+  hullPositions = generateHullPositions();
+
+  // NOTE: matrices can be concatenated with e.g.
+  // mat = new THREE.Matrix3()
+  //   .copy(matXYZToLMS)
+  //   .multiply(matsRGBToXYZ);
+  const getMatToXYZ = (space) => {
+    let mat = matIdentity;
+    switch(space) {
+      case enumColorSpace.CIE_XYZ:
+      case enumColorSpace.CIE_xyY:
+        break;
+      case enumColorSpace.sRGB:
+        mat = matsRGBToXYZ;
+        break;
+      case enumColorSpace.LMS:
+        mat = matLMSToXYZ;
+        break;
+      default:
+        break;
+    }
+    return mat;
+  };
+
+  const getMatFromXYZ = (space) => {
+    let mat = matIdentity;
+    switch(space) {
+      case enumColorSpace.CIE_XYZ:
+      case enumColorSpace.CIE_xyY:
+        break;
+      case enumColorSpace.sRGB:
+        mat = matXYZTosRGB;
+        break;
+      case enumColorSpace.LMS:
+        mat = matXYZToLMS;
+        break;
+      default:
+        break;
+    }
+    return mat;
+  };
+
+  const frameToSpace = () => {
+    if (referenceFrame == enumReferenceFrame.LOCAL) return workingSpace;
+    let res = enumColorSpace.sRGB;
+    switch(referenceFrame) {
+      case enumReferenceFrame.CIE_xyY: {
+        res = enumColorSpace.CIE_xyY;
+        break;
+      }
+      case enumReferenceFrame.CIE_XYZ: {
+        res = enumColorSpace.CIE_XYZ;
+        break;
+      }
+      case enumReferenceFrame.LMS: {
+        res = enumColorSpace.LMS;
+        break;
+      }
+    }
+    return res;
+  }
+
+  const initSpaces = () => {
+    plotSpace   = frameToSpace()
+    matToXYZ    = getMatToXYZ(workingSpace);
+    matFromXYZ  = getMatFromXYZ(plotSpace);
+    if (lastImage) plotImageColors(lastImage);
+  };
+
+  initSpaces();
+
+
+  // Populate a dropdown from an enum object
+  const populateSelect = (selectId, enumObj) => {
+    const sel = document.getElementById(selectId);
+    for (const key in enumObj) {
+      const opt = document.createElement('option');
+      opt.value = enumObj[key];
+      opt.textContent = key;
+      sel.appendChild(opt);
+    }
+  }
+
+  // Init dropdowns
+  populateSelect('working-space', enumColorSpace);
+  populateSelect('reference-frame', enumReferenceFrame);
+
+  // Change handlers
+  document.getElementById('working-space').addEventListener('change', e => {
+    workingSpace = parseInt(e.target.value, 10);
+    initSpaces();
+  });
+
+  document.getElementById('reference-frame').addEventListener('change', e => {
+    referenceFrame = parseInt(e.target.value, 10);
+    initSpaces();
+  });
+
+  document.getElementById("toggleHull").addEventListener("click", () => {
+    hullEnabled = !hullEnabled;
+    console.log("Hull:", hullEnabled);
+    if (hullEnabled) {
+      if (lastImage) plotImageColors(lastImage);
+    } else {
+      if (hullPoints) {
+        scene.remove(hullPoints);
+        hullPoints.geometry.dispose();
+        hullPoints.material.dispose();
+        hullPoints = null;
+      }
+    }
+  });
+
+  document.getElementById("toggleLocus").addEventListener("click", () => {
+    locusEnabled = !locusEnabled;
+    console.log("Locus:", locusEnabled);
+    if (locusEnabled) {
+      if (lastImage) plotImageColors(lastImage);
+    } else {
+      if (locusPoints) {
+        scene.remove(locusPoints);
+        locusPoints.geometry.dispose();
+        locusPoints.material.dispose();
+        locusPoints = null;
+        scene.remove(locusMesh);
+        locusMesh.geometry.dispose();
+        locusMesh.material.dispose();
+        locusMesh = null;
+      }
+    }
+  });
+
+  window.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  });
+
+  window.addEventListener('drop', e => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+
+    const reader = new FileReader();
+    reader.onload = evt => {
+      const img = new Image();
+      img.onload = () => plotImageColors(img);
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const fileInput = document.getElementById("fileInput");
+
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if (!file || !file.type.startsWith("image/")) return;
+
+    const reader = new FileReader();
+    reader.onload = evt => {
+      const img = new Image();
+      img.onload = () => plotImageColors(img);
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  animate();
+</script>

@@ -6,6 +6,7 @@ Release notes
 * Reworked util module
 * Reworked docs
 * Some other minor changes and fixes
+* Updated dependencies
 
 .. rubric:: v 0.7.2 a - Apr. 2024
 
