@@ -1,6 +1,12 @@
 Release notes
 =============
 
+.. rubric:: v 0.9.0 a - Sep. 2026
+
+* Fixed :meth:`.Spectral.wl_to_xyz` clipping color-matching values to [0, 1]. CIE 1931 CMFs legitimately exceed 1.0 (z-bar peaks at 1.78, x-bar at 1.06); clipping distorted chromaticity, worst in blue-violet (e.g. 450nm x shifted 0.157 to 0.245)
+* Added spectral regression tests
+* Re-rendered visible spectrum sweep example with corrected values
+
 .. rubric:: v 0.8.0 a - May 2025
 
 * Reworked util module

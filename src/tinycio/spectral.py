@@ -154,7 +154,7 @@ class Spectral:
         t = (wl - wl_values[closest_idx]) / (wl_values[second_closest_idx] - wl_values[closest_idx])
         interpolated_xyz = closest_xyz + t * (second_closest_xyz - closest_xyz)
 
-        return Float3(interpolated_xyz).clip(0., 1.)
+        return Float3(interpolated_xyz)
 
     @classmethod
     def wl_to_srgb_linear(cls, wl:float, normalize:bool=False, lum_scale:float=0.25) -> Float3:
